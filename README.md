@@ -11,6 +11,19 @@ Evolve combines elements of a clicker with an idler and has lots of micromanagem
 
 What will you evolve into?
 
+## Fork Additions: Resource Max Alerts
+This fork adds a checkbox next to each resource in the left-hand resource list. Resources that cannot meaningfully alert have no checkbox: the population resource (named after the current species), Crates, Containers, crafted resources (Plywood, Brick, etc.), and prestige resources (Plasmids, Phage, etc.). Checking a resource's box arms an audible alert: a ding plays when that resource reaches its maximum capacity. The ding plays once per fill (it re-arms only after the resource dips below max), and a shared 30 second cooldown prevents any resource from dinging within 30 seconds of another alert. Checkbox state is saved with the game (under `settings.resAlert`), so it survives page reloads and is included in exported/imported save strings. The sound is synthesized with the Web Audio API, so no audio assets are required.
+
+Implementation lives in `src/resources.js` (checkbox rendering, alert state, and sound) with the periodic check called from `midLoop` in `src/main.js`.
+
+While Accelerated Time (the double-speed mode accumulated offline) is active, all durations rendered through the shared `timeFormat` helper — research/build affordability timers, spire and waygate progress, the cap timer, etc. — are halved to show real-time expectations instead of game time.
+
+A cap timer sits in the resource column header between Morale and the power meter: it shows the shortest time-to-cap among alert-checked resources (already-capped resources are skipped; `0s` if all checked resources are capped; `Never` if none are filling). It is hidden when no eligible resource is checked. Hovering the timer shows a tooltip naming the resource the displayed time belongs to.
+
+The version display in the top bar checks upstream (`pmotschmann.github.io/Evolve`) on load and every 15 minutes; if upstream has a newer release than this fork, the version text turns light red and gains a trailing exclamation mark (replacing the stock yellow "Update Available" text swap).
+
+Additionally, in the GruvBox Dark theme, resources with an armed alert checkbox turn light red when above 85% of their capacity and stay red even at max (instead of the standard yellow near-max color); this updates immediately when the checkbox is toggled. Unchecked resources keep the game's default coloring. The threshold class (`near-cap`) and alert class (`res-alert`) are applied for all themes in `src/main.js`/`src/resources.js`, but only GruvBox Dark styles them (`src/evolve.less`).
+
 ## Submitting Issues
 If you think you have discovered a bug or have some other issue with the game then you can open an issue here on Github.
 Please do not open Github issues to ask gameplay questions, use Reddit or Discord for that.

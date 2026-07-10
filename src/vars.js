@@ -1544,6 +1544,15 @@ if (!global.settings.hasOwnProperty('mtorder')){
 if (!global.settings.hasOwnProperty('resBar')){
     global.settings['resBar'] = {};
 }
+if (!global.settings.hasOwnProperty('resAlert')){
+    global.settings['resAlert'] = {};
+}
+// Initialize the accelerated time tracker from the save immediately; addATime() syncs it
+// again at loop start, but speed-aware displays render before that and would otherwise
+// show unscaled game time for the first few seconds
+if (global.settings['at'] > 0){
+    atrack.t = global.settings.at;
+}
 
 export function setupStats(){
     // Stat Counters

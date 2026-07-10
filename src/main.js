@@ -3,7 +3,7 @@ import { loc } from './locale.js';
 import { unlockAchieve, checkAchievements, drawAchieve, alevel, universeAffix, challengeIcon, unlockFeat, checkAdept } from './achieve.js';
 import { gameLoop, vBind, popover, clearPopper, flib, tagEvent, timeCheck, arpaTimeCheck, timeFormat, powerModifier, resetResBuffer, modRes, initMessageQueue, messageQueue, calc_mastery, calcPillar, darkEffect, calcQueueMax, calcRQueueMax, buildQueue, shrineBonusActive, getShrineBonus, eventActive, easterEggBind, trickOrTreatBind, powerGrid, deepClone, addATime, exceededATimeThreshold, loopTimers, calcQuantumLevel, drawPet } from './functions.js';
 import { races, traits, racialTrait, orbitLength, servantTrait, randomMinorTrait, biomes, planetTraits, shapeShift, fathomCheck, blubberFill, cleanRemoveTrait } from './races.js';
-import { defineResources, resource_values, spatialReasoning, craftCost, plasmidBonus, faithBonus, faithTempleCount, tradeRatio, craftingRatio, crateValue, containerValue, tradeSellPrice, tradeBuyPrice, atomic_mass, supplyValue, galaxyOffers } from './resources.js';
+import { defineResources, resource_values, spatialReasoning, craftCost, plasmidBonus, faithBonus, faithTempleCount, tradeRatio, craftingRatio, crateValue, containerValue, tradeSellPrice, tradeBuyPrice, atomic_mass, supplyValue, galaxyOffers, checkResAlerts, alertTimer } from './resources.js';
 import { defineJobs, job_desc, loadFoundry, farmerValue, jobName, jobScale, workerScale, limitCraftsmen, loadServants} from './jobs.js';
 import { defineIndustry, f_rate, manaCost, setPowerGrid, gridEnabled, gridDefs, nf_resources, replicator, luxGoodPrice, smelterUnlocked, smelterFuelConfig, setupRituals, maxRitualNum, ritual_types } from './industry.js';
 import { checkControlling, garrisonSize, armyRating, govTitle, govCivics, govEffect, weaponTechModifer } from './civics.js';
@@ -299,7 +299,8 @@ vBind({
     el: '#race',
     data: {
         race: global.race,
-        city: global.city
+        city: global.city,
+        alrt: alertTimer
     },
     methods: {
         name(){
@@ -307,6 +308,9 @@ vBind({
         }
     },
     filters: {
+        timer(t){
+            return timeFormat(t);
+        },
         replicate(kw){
             if (global.race.hasOwnProperty('governor') && global.race.governor.hasOwnProperty('tasks') && global.race.hasOwnProperty('replicator') && Object.values(global.race.governor.tasks).includes('replicate') && global.race.governor.config.replicate.pow.on && global.race.replicator.pow > 0){
                 return kw + global.race.replicator.pow;
@@ -327,6 +331,14 @@ popover('race',
         return typeof races[global.race.species].desc === 'string' ? races[global.race.species].desc : races[global.race.species].desc();
     },{
         elm: '#race > .name'
+    }
+);
+
+popover('capTimer',
+    function(){
+        return alertTimer.res && global.resource[alertTimer.res]
+            ? global.resource[alertTimer.res].name.replace('_',' ')
+            : loc('time_never');
     }
 );
 
@@ -8131,6 +8143,7 @@ function fastLoop(){
 }
 
 function midLoop(){
+    checkResAlerts();
     const astroSign = astrologySign();
     if (global.race.species === 'protoplasm'){
         let base = 100;
@@ -10369,6 +10382,14 @@ function midLoop(){
             }
             else if ($(`#res${res} .count`).hasClass('has-text-warning')){
                 $(`#res${res} .count`).removeClass('has-text-warning');
+            }
+            if (global.resource[res].amount > global.resource[res].max * 0.85){
+                if (!$(`#res${res} .count`).hasClass('near-cap')){
+                    $(`#res${res} .count`).addClass('near-cap');
+                }
+            }
+            else if ($(`#res${res} .count`).hasClass('near-cap')){
+                $(`#res${res} .count`).removeClass('near-cap');
             }
         });
 
@@ -12974,18 +12995,24 @@ function spyCaught(i){
     }
 }
 
-intervals['version_check'] = setInterval(function(){
+function checkUpstreamVersion(){
     $.ajax({
         url: 'https://pmotschmann.github.io/Evolve/package.json',
         type: 'GET',
         dataType: 'json',
         success: function(res){
             if (res['version'] && res['version'] != global['version'] && !global['beta']){
-                $('#topBar .version > a').html(`<span class="has-text-warning">${loc(`update_avail`)}</span> v`+global.version+revision);
+                let ver = $('#topBar .version');
+                if (!ver.hasClass('version-behind')){
+                    ver.addClass('version-behind');
+                    ver.append(`<span class="behind-mark">!</span>`);
+                }
             }
         }
     });
-}, 900000);
+}
+intervals['version_check'] = setInterval(checkUpstreamVersion, 900000);
+checkUpstreamVersion();
 
 let changeLog = $(`<div class="infoBox"></div>`);
 popover('versionLog',getTopChange(changeLog),{ wide: true });

@@ -2189,6 +2189,18 @@ html.gruvboxDark {
         border: @secondary-border solid .0625rem;
     }
 
+    // Resources with an armed alert turn light red above 85% capacity and stay red even
+    // at max; unchecked resources keep the default coloring (yellow at ~99%)
+    .resources .resource.res-alert .count.near-cap {
+        color: lighten(@has-text-danger, 12%);
+    }
+
+    // Version display turns light red with a "!" when upstream has a newer release than this fork
+    #topBar .version.version-behind a,
+    #topBar .version.version-behind .behind-mark {
+        color: lighten(@has-text-danger, 12%);
+    }
+
     .popper {
         .grad-from-left {
             background-image: linear-gradient(90deg, @has-text-danger 45%, @popper 55%);
@@ -2665,6 +2677,10 @@ a {
         .morale {
             text-align: center;
         }
+
+        .capTimer-contain {
+            text-align: center;
+        }
     }
 
     .queueCol {
@@ -2811,6 +2827,15 @@ a {
                 width: 70%;
                 display: flex;
                 justify-content: space-between;
+
+                .res-sel {
+                    align-self: center;
+                    margin-right: .25rem;
+                }
+
+                .count {
+                    margin-left: auto;
+                }
             }
 
             > :nth-child(2) {

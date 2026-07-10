@@ -1,5 +1,5 @@
 import { global, tmp_vars, keyMultiplier, breakdown, sizeApproximation, p_on, support_on, active_rituals } from './vars.js';
-import { vBind, clearElement, modRes, flib, calc_mastery, calcPillar, eventActive, easterEgg, trickOrTreat, popover, harmonyEffect, darkEffect, hoovedRename, messageQueue } from './functions.js';
+import { vBind, clearElement, modRes, flib, calc_mastery, calcPillar, eventActive, easterEgg, trickOrTreat, popover, harmonyEffect, darkEffect, hoovedRename, messageQueue, timeFormat } from './functions.js';
 import { traits, fathomCheck } from './races.js';
 import { templeCount, actions } from './actions.js';
 import { workerScale } from './jobs.js';
@@ -769,6 +769,123 @@ export function tradeSummery(){
     }
 }
 
+// Resource max alerts
+// Resources with a checked alert box play a ding when they first reach max capacity
+// The ding re-arms only after the resource dips below max, and a shared 30 second
+// cooldown suppresses (not defers) dings triggered by any other resource
+const resAlerts = {};
+let resAlertLast = 0;
+let resAlertCtx = false;
+
+// Reactive state for the header display showing the shortest time-to-cap among alerted
+// resources; bound into the #race Vue instance in main.js. time is seconds, or 0 when
+// every alerted resource is already capped, or -1 (renders as Never) when none will fill.
+// res holds the resource key that produced the displayed time, for the tooltip
+export const alertTimer = { display: false, time: 0, res: false };
+
+function setResAlert(res,checked){
+    global.settings.resAlert[res] = checked;
+    $(`#res${res}`).toggleClass('res-alert',checked);
+    if (checked){
+        let r = global.resource[res];
+        resAlerts[res] = { atMax: r && r.max > 0 && r.amount >= r.max };
+        // AudioContext must be created/resumed during a user gesture or browsers mute it;
+        // when restoring from a save there is no gesture yet, so retry on the first one
+        try {
+            if (!resAlertCtx){
+                resAlertCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (resAlertCtx.state === 'suspended'){
+                resAlertCtx.resume();
+                $(document).off('.resAlert').one('mousedown.resAlert keydown.resAlert',function(){
+                    if (resAlertCtx && resAlertCtx.state === 'suspended'){
+                        resAlertCtx.resume();
+                    }
+                });
+            }
+        }
+        catch (e){
+            resAlertCtx = false;
+        }
+    }
+    else {
+        delete resAlerts[res];
+    }
+}
+
+function playResAlert(){
+    if (!resAlertCtx){ return; }
+    let start = resAlertCtx.currentTime;
+    let gain = resAlertCtx.createGain();
+    gain.gain.setValueAtTime(0.0001,start);
+    // Two oscillators share this gain node, so peaks reach twice the gain value; keep it <= 0.5 to avoid clipping
+    gain.gain.exponentialRampToValueAtTime(0.5,start + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001,start + 1.1);
+    gain.connect(resAlertCtx.destination);
+    [1046.5,1568].forEach(function(freq){
+        let osc = resAlertCtx.createOscillator();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        osc.connect(gain);
+        osc.start(start);
+        osc.stop(start + 1.1);
+    });
+}
+
+export function checkResAlerts(){
+    let stamp = Date.now();
+    let watched = 0;
+    let capped = 0;
+    let cappedRes = false;
+    let minTime = Infinity;
+    let minRes = false;
+    Object.keys(resAlerts).forEach(function(res){
+        let r = global.resource[res];
+        if (!r || !r.display || r.max <= 0){
+            resAlerts[res].atMax = false;
+            return;
+        }
+        watched++;
+        let atMax = r.amount >= r.max;
+        if (atMax){
+            capped++;
+            if (!cappedRes){
+                cappedRes = res;
+            }
+        }
+        else if (r.diff > 0){
+            let time = (r.max - r.amount) / r.diff;
+            if (time < minTime){
+                minTime = time;
+                minRes = res;
+            }
+        }
+        if (atMax && !resAlerts[res].atMax && stamp - resAlertLast >= 30000){
+            playResAlert();
+            resAlertLast = stamp;
+        }
+        resAlerts[res].atMax = atMax;
+    });
+    if (watched === 0){
+        alertTimer.display = false;
+    }
+    else {
+        alertTimer.display = true;
+        if (minTime !== Infinity){
+            alertTimer.time = minTime;
+            alertTimer.res = minRes;
+        }
+        else if (capped === watched){
+            alertTimer.time = 0;
+            alertTimer.res = cappedRes;
+        }
+        else {
+            alertTimer.time = -1;
+            alertTimer.res = false;
+        }
+    }
+}
+
 // Load resource function
 // This function defines each resource, loads saved values from localStorage
 // And it creates Vue binds for various resource values
@@ -812,6 +929,9 @@ function loadResource(name,wiki,max,rate,tradable,stackable,color){
     if (!global.settings.resBar.hasOwnProperty(name)){
         global.settings.resBar[name] = true;
     }
+    if (!global.settings.resAlert.hasOwnProperty(name)){
+        global.settings.resAlert[name] = false;
+    }
     if (!global.resource[name].hasOwnProperty('bar')){
         global.resource[name]['bar'] = global.settings.resBar[name];
     }
@@ -832,12 +952,18 @@ function loadResource(name,wiki,max,rate,tradable,stackable,color){
         global['resource'][name]['trade'] = 0;
     }
 
+    // Population, Crates, and Containers get no alert checkbox; neither do crafted
+    // resources (the max -1/-2 branch below), which have no cap to alert on
+    let selBox = (name === global.race.species || name === 'Crates' || name === 'Containers')
+        ? ``
+        : `<input id="sel${name}" class="res-sel" type="checkbox" @change="selRes('${name}',$event)" aria-label="select ${global.resource[name].name}">`;
+
     var res_container;
     if (global.resource[name].max === -1 || global.resource[name].max === -2){
         res_container = $(`<div id="res${name}" class="resource crafted" v-show="display"><div><h3 class="res has-text-${color}">{{ name | namespace }}</h3><span id="cnt${name}" class="count">{{ amount | diffSize }}</span></div></div>`);
     }
     else {
-        res_container = $(`<div id="res${name}" class="resource${global.settings.resBar[name] ? ` showBar` : ``}" v-show="display" :style="{ '--percent-full': (bar && max > 0 ? (amount/max)*100 : 0) + '%' }"><div><h3 class="res has-text-${color} bar" @click="toggle('${name}')">{{ name | namespace }}</h3><span id="cnt${name}" class="count">{{ amount | size }} / {{ max | size }}</span></div></div>`);
+        res_container = $(`<div id="res${name}" class="resource${global.settings.resBar[name] ? ` showBar` : ``}" v-show="display" :style="{ '--percent-full': (bar && max > 0 ? (amount/max)*100 : 0) + '%' }"><div>${selBox}<h3 class="res has-text-${color} bar" @click="toggle('${name}')">{{ name | namespace }}</h3><span id="cnt${name}" class="count">{{ amount | size }} / {{ max | size }}</span></div></div>`);
     }
 
     if (stackable){
@@ -893,6 +1019,9 @@ function loadResource(name,wiki,max,rate,tradable,stackable,color){
             }
         },
         methods: {
+            selRes(res,event){
+                setResAlert(res,event.target.checked);
+            },
             resRate(n){
                 let diff = sizeApproximation(global.resource[n].diff,2);
                 return `${global.resource[name].name} ${diff} per second`;
@@ -959,6 +1088,12 @@ function loadResource(name,wiki,max,rate,tradable,stackable,color){
             }
         }
     });
+
+    // Restore saved alert state; must run after the Vue mount above rebuilds the row's DOM
+    if (selBox && global.settings.resAlert[name]){
+        $(`#sel${name}`).prop('checked',true);
+        setResAlert(name,true);
+    }
 
     breakdownPopover(`cnt${name}`,name,'c');
 
@@ -2150,23 +2285,12 @@ export function craftingPopover(id,res,type,extra){
                     },
                     counter(val){
                         let rate = -global['resource'][res].diff;
-                        let time = +(val / rate).toFixed(0);
-                        
-                        if (time > 60){
-                            let secs = time % 60;
-                            let mins = (time - secs) / 60;
-                            if (mins >= 60){
-                                let r = mins % 60;
-                                let hours = (mins - r) / 60;
-                                return `${hours}h ${r}m`;
-                            }
-                            else {
-                                return `${mins}m ${secs}s`;
-                            }
+                        let time = val / rate;
+
+                        if (!Number.isFinite(time) || time < 0){
+                            return timeFormat(-1);
                         }
-                        else {
-                            return `${time}s`;
-                        }
+                        return timeFormat(time);
                     },
                     namespace(name){
                         return name.replace("_"," ");
@@ -2276,32 +2400,17 @@ function breakdownPopover(id,name,type){
                         let time = 0;
                         if (rate < 0){
                             rate *= -1;
-                            time = +(val / rate).toFixed(0);
+                            time = val / rate;
                         }
                         else {
                             let gap = global['resource'][name].max - val;
-                            time = +(gap / rate).toFixed(0);
+                            time = gap / rate;
                         }
-    
+
                         if (time === Infinity || Number.isNaN(time)){
-                            return 'Never';
+                            return timeFormat(-1);
                         }
-                        
-                        if (time > 60){
-                            let secs = time % 60;
-                            let mins = (time - secs) / 60;
-                            if (mins >= 60){
-                                let r = mins % 60;
-                                let hours = (mins - r) / 60;
-                                return `${hours}h ${r}m`;
-                            }
-                            else {
-                                return `${mins}m ${secs}s`;
-                            }
-                        }
-                        else {
-                            return `${time}s`;
-                        }
+                        return timeFormat(time);
                     },
                     direction(val){
                         return val >= 0 ? loc('to_full') : loc('to_empty');

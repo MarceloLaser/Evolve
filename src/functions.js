@@ -1153,6 +1153,11 @@ export function timeFormat(time){
         formatted = loc('time_never');
     }
     else {
+        // Inputs are game time; while accelerated time is active the game runs at double
+        // speed, so scale down to show real time expectations
+        if (atrack.t > 0){
+            time /= loopTimers().timeAccelerationFactor;
+        }
         time = +(time.toFixed(0));
         const secs_per_min = 60;
 
