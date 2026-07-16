@@ -774,6 +774,9 @@ export function tradeSummery(){
 // The ding re-arms only after the resource dips below max, and a shared 30 second
 // cooldown suppresses (not defers) dings triggered by any other resource
 const resAlerts = {};
+// Names of resources that render an alert checkbox; drives the master checkbox next to
+// the species name, which only considers currently displayed resources
+const alertEligible = new Set();
 let resAlertLast = 0;
 let resAlertCtx = false;
 
@@ -811,6 +814,64 @@ function setResAlert(res,checked){
     else {
         delete resAlerts[res];
     }
+    syncMasterAlert();
+}
+
+// Sets the master checkbox to unchecked (none), indeterminate dash (some), or checked (all)
+// based on the alert state of the displayed eligible resources
+function syncMasterAlert(){
+    let total = 0;
+    let checked = 0;
+    alertEligible.forEach(function(res){
+        let r = global.resource[res];
+        if (r && r.display){
+            total++;
+            if (global.settings.resAlert[res]){
+                checked++;
+            }
+        }
+    });
+    $('#selAll').prop('checked', total > 0 && checked === total).prop('indeterminate', checked > 0 && checked < total);
+}
+
+// Master checkbox click: checks every displayed eligible resource if none are checked,
+// otherwise unchecks them all
+export function setAllResAlerts(){
+    let any = false;
+    alertEligible.forEach(function(res){
+        let r = global.resource[res];
+        if (r && r.display && global.settings.resAlert[res]){
+            any = true;
+        }
+    });
+    let target = !any;
+    alertEligible.forEach(function(res){
+        let r = global.resource[res];
+        if (r && r.display){
+            $(`#sel${res}`).prop('checked',target);
+            setResAlert(res,target);
+        }
+    });
+}
+
+// List of alerted resources that are not yet capped, closest to cap first, for the
+// cap timer tooltip. time is seconds, or -1 for resources that will never fill
+export function resAlertList(){
+    let list = [];
+    Object.keys(resAlerts).forEach(function(res){
+        let r = global.resource[res];
+        if (!r || !r.display || r.max <= 0 || r.amount >= r.max){
+            return;
+        }
+        list.push({
+            name: r.name.replace('_',' '),
+            time: r.diff > 0 ? (r.max - r.amount) / r.diff : -1
+        });
+    });
+    list.sort(function(a,b){
+        return (a.time < 0 ? Infinity : a.time) - (b.time < 0 ? Infinity : b.time);
+    });
+    return list;
 }
 
 function playResAlert(){
@@ -884,6 +945,7 @@ export function checkResAlerts(){
             alertTimer.res = false;
         }
     }
+    syncMasterAlert();
 }
 
 // Load resource function
@@ -954,9 +1016,15 @@ function loadResource(name,wiki,max,rate,tradable,stackable,color){
 
     // Population, Crates, and Containers get no alert checkbox; neither do crafted
     // resources (the max -1/-2 branch below), which have no cap to alert on
-    let selBox = (name === global.race.species || name === 'Crates' || name === 'Containers')
+    let selBox = (name === global.race.species || name === 'Crates' || name === 'Containers' || global.resource[name].max === -1 || global.resource[name].max === -2)
         ? ``
         : `<input id="sel${name}" class="res-sel" type="checkbox" @change="selRes('${name}',$event)" aria-label="select ${global.resource[name].name}">`;
+    if (selBox){
+        alertEligible.add(name);
+    }
+    else {
+        alertEligible.delete(name);
+    }
 
     var res_container;
     if (global.resource[name].max === -1 || global.resource[name].max === -2){

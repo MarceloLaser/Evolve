@@ -2666,6 +2666,11 @@ a {
             cursor: default;
         }
 
+        .name .res-sel {
+            margin-right: .25rem;
+            vertical-align: middle;
+        }
+
         .power {
             text-align: right;
         }
@@ -5534,4 +5539,17 @@ div.bigbang {
     z-index: 999;
     position: absolute;
     top: 1rem;
+}
+
+.capTimerList {
+    min-width: 9rem;
+
+    > div {
+        display: flex;
+        justify-content: space-between;
+
+        span + span {
+            margin-left: 1rem;
+        }
+    }
 }

@@ -932,7 +932,7 @@ export function index(){
     columns.append(`<div class="column is-one-quarter leftColumn">
         <div id="race" class="race colHeader">
             <h2 class="is-sr-only">Race Info</h2>
-            <div class="name">{{ name() }}</div>
+            <div class="name"><input id="selAll" class="res-sel" type="checkbox" @change="selAll" aria-label="toggle alerts for all resources">{{ name() }}</div>
             <div class="morale-contain"><span id="morale" v-show="city.morale.current" class="morale">${loc('morale')} <span class="has-text-warning">{{ city.morale.current | mRound }}%</span></div>
             <div class="capTimer-contain"><span id="capTimer" class="capTimer" v-show="alrt.display" aria-label="minimum time until an alerted resource reaches max">{{ alrt.time | timer }}</span></div>
             <div class="power"><span id="powerStatus" class="has-text-warning" v-show="city.powered"><span>MW</span> <span id="powerMeter" class="meter">{{ city.power | replicate | approx }}</span></span></div>

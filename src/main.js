@@ -3,7 +3,7 @@ import { loc } from './locale.js';
 import { unlockAchieve, checkAchievements, drawAchieve, alevel, universeAffix, challengeIcon, unlockFeat, checkAdept } from './achieve.js';
 import { gameLoop, vBind, popover, clearPopper, flib, tagEvent, timeCheck, arpaTimeCheck, timeFormat, powerModifier, resetResBuffer, modRes, initMessageQueue, messageQueue, calc_mastery, calcPillar, darkEffect, calcQueueMax, calcRQueueMax, buildQueue, shrineBonusActive, getShrineBonus, eventActive, easterEggBind, trickOrTreatBind, powerGrid, deepClone, addATime, exceededATimeThreshold, loopTimers, calcQuantumLevel, drawPet } from './functions.js';
 import { races, traits, racialTrait, orbitLength, servantTrait, randomMinorTrait, biomes, planetTraits, shapeShift, fathomCheck, blubberFill, cleanRemoveTrait } from './races.js';
-import { defineResources, resource_values, spatialReasoning, craftCost, plasmidBonus, faithBonus, faithTempleCount, tradeRatio, craftingRatio, crateValue, containerValue, tradeSellPrice, tradeBuyPrice, atomic_mass, supplyValue, galaxyOffers, checkResAlerts, alertTimer } from './resources.js';
+import { defineResources, resource_values, spatialReasoning, craftCost, plasmidBonus, faithBonus, faithTempleCount, tradeRatio, craftingRatio, crateValue, containerValue, tradeSellPrice, tradeBuyPrice, atomic_mass, supplyValue, galaxyOffers, checkResAlerts, alertTimer, setAllResAlerts, resAlertList } from './resources.js';
 import { defineJobs, job_desc, loadFoundry, farmerValue, jobName, jobScale, workerScale, limitCraftsmen, loadServants} from './jobs.js';
 import { defineIndustry, f_rate, manaCost, setPowerGrid, gridEnabled, gridDefs, nf_resources, replicator, luxGoodPrice, smelterUnlocked, smelterFuelConfig, setupRituals, maxRitualNum, ritual_types } from './industry.js';
 import { checkControlling, garrisonSize, armyRating, govTitle, govCivics, govEffect, weaponTechModifer } from './civics.js';
@@ -305,6 +305,9 @@ vBind({
     methods: {
         name(){
             return flib('name');
+        },
+        selAll(){
+            setAllResAlerts();
         }
     },
     filters: {
@@ -336,9 +339,15 @@ popover('race',
 
 popover('capTimer',
     function(){
-        return alertTimer.res && global.resource[alertTimer.res]
-            ? global.resource[alertTimer.res].name.replace('_',' ')
-            : loc('time_never');
+        let list = resAlertList();
+        let content = $(`<div class="capTimerList"></div>`);
+        if (list.length === 0){
+            content.append(`<div><span>&mdash;</span></div>`);
+        }
+        list.forEach(function(item){
+            content.append(`<div><span>${item.name}</span><span>${timeFormat(item.time)}</span></div>`);
+        });
+        return content;
     }
 );
 

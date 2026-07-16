@@ -18,7 +18,9 @@ Implementation lives in `src/resources.js` (checkbox rendering, alert state, and
 
 While Accelerated Time (the double-speed mode accumulated offline) is active, all durations rendered through the shared `timeFormat` helper — research/build affordability timers, spire and waygate progress, the cap timer, etc. — are halved to show real-time expectations instead of game time.
 
-A cap timer sits in the resource column header between Morale and the power meter: it shows the shortest time-to-cap among alert-checked resources (already-capped resources are skipped; `0s` if all checked resources are capped; `Never` if none are filling). It is hidden when no eligible resource is checked. Hovering the timer shows a tooltip naming the resource the displayed time belongs to.
+A cap timer sits in the resource column header between Morale and the power meter: it shows the shortest time-to-cap among alert-checked resources (already-capped resources are skipped; `0s` if all checked resources are capped; `Never` if none are filling). It is hidden when no eligible resource is checked. Hovering the timer shows a tooltip listing every checked, not-yet-capped resource with its own time to cap, closest first.
+
+A master checkbox next to the species name toggles all resource alert checkboxes at once: it shows unchecked/dash/checked when none/some/all displayed resources are checked, and a click checks everything if nothing was checked, otherwise unchecks everything.
 
 The version display in the top bar checks upstream (`pmotschmann.github.io/Evolve`) on load and every 15 minutes; if upstream has a newer release than this fork, the version text turns light red and gains a trailing exclamation mark (replacing the stock yellow "Update Available" text swap).
 
