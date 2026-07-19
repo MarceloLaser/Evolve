@@ -34,11 +34,14 @@ crate/craft controls + rate on a second right-aligned line. Page scrolls vertica
 for tall tab content; `.topBar` and the `.tabs` strip scroll sideways instead of
 clipping.
 
-Step 3 (settings density): mobile block compacts `#settings` — base font .75rem
-(Buefy switch tracks are em-sized so they shrink with it), one toggle per line,
-smaller buttons/dropdown items/labels/textarea, tighter section margins, smaller
-`.keyMap`/`.msgInput` inputs, and `.tab-item`/`.tab-content` left gutters reduced
-from 1rem to .25rem for all tabs.
+Step 3 (settings density): mobile block compacts `#settings` — base font .75rem,
+buttons and dropdown triggers .65rem/1.25rem tall, switches .7rem (Buefy tracks are
+em-sized so they shrink with font), one toggle per line, smaller dropdown
+items/labels/textarea, tighter section margins, smaller `.keyMap`/`.msgInput`
+inputs, and `.tab-item`/`.tab-content` left gutters reduced from 1rem to .25rem for
+all tabs. The tab-mappings section is hidden on mobile via
+`.importExport:has(#showCivKey)` (keyboard shortcuts, meaningless on touch); key
+mappings kept pending a mobile replacement for the multiplier functionality.
 
 ## Known follow-ups (not yet done)
 

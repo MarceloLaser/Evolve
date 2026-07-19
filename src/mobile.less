@@ -136,15 +136,24 @@
         margin-left: 0;
         font-size: .75rem;
 
+        // Covers both plain buttons (Import/Export/etc.) and dropdown triggers
+        // (Theme, Number Notation, ...), which are .button elements too
         .button {
-            font-size: .75rem;
-            height: 1.5rem;
-            padding: 0 .5rem;
+            font-size: .65rem;
+            height: 1.25rem;
+            padding: 0 .4rem;
         }
 
         // Buefy switch tracks are em-sized, so they scale down with the font
         .switch {
-            font-size: .75rem;
+            font-size: .7rem;
+        }
+
+        // Tab mappings are keyboard shortcuts for switching tabs — meaningless on a
+        // touch screen. The section shares .importExport with the save sections, so
+        // pick it out by one of its unique inputs
+        .importExport:has(#showCivKey) {
+            display: none;
         }
 
         // One toggle per line reads better than ragged wrapping at this width
