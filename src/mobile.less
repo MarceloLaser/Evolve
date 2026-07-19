@@ -180,6 +180,32 @@
         .aTitle {
             line-height: .9rem;
         }
+
+        // On/off counts are siblings of the button, not children — size them to match
+        span.on,
+        span.off {
+            font-size: .75rem;
+        }
+    }
+
+    // Section headers (Outskirts, Residential Block, ...) match building name size
+    .main .content h3.name {
+        font-size: .75rem;
+    }
+
+    // Tighten the gap between a tab strip and its subtab headers
+    .main .content {
+        .tabs:not(:last-child) {
+            margin-bottom: .25rem;
+        }
+
+        .tabs ul {
+            margin-top: .25rem;
+        }
+
+        .tabs a {
+            padding: .25em .75em;
+        }
     }
 
     // ---- Settings tab compaction ----
