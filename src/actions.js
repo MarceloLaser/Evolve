@@ -7511,6 +7511,29 @@ export function removeAction(id){
     clearPopper(id);
 }
 
+// Re-renders the currently open research/evolution tooltip so its contents (notably the
+// affordability countdown) stay current without mouse movement. City/space buildings
+// already live-update their timer through the Vue-bound #popTimer, so they are not
+// handled here; nested-region categories cannot be resolved from the popper id anyway
+export function refreshActionTooltip(){
+    let popper = $('#popper');
+    if (popper.length === 0){
+        return;
+    }
+    let id = popper.data('id');
+    if (typeof id !== 'string'){
+        return;
+    }
+    ['tech','evolution'].forEach(function(category){
+        if (id.substring(0,category.length + 1) === `${category}-`){
+            let type = id.substring(category.length + 1);
+            if (actions[category][type] && actions[category][type].id === id){
+                actionDesc(popper,actions[category][type],global[category][type],false,category,type);
+            }
+        }
+    });
+}
+
 export function updateDesc(c_action,category,action){
     var id = c_action.id;
     if (global[category] && global[category][action] && global[category][action]['count']){

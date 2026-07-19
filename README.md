@@ -26,6 +26,9 @@ The version display in the top bar checks upstream (`pmotschmann.github.io/Evolv
 
 Additionally, in the GruvBox Dark theme, resources with an armed alert checkbox turn light red when above 85% of their capacity and stay red even at max (instead of the standard yellow near-max color); this updates immediately when the checkbox is toggled. Unchecked resources keep the game's default coloring. The threshold class (`near-cap`) and alert class (`res-alert`) are applied for all themes in `src/main.js`/`src/resources.js`, but only GruvBox Dark styles them (`src/evolve.less`).
 
+## Fork Additions: Live Tooltips
+Research and evolution tooltips refresh once per second while open, so the "ready in" affordability countdown at the bottom counts down without needing mouse movement (cost coloring updates too). Building tooltips already had live timers via the game's own reactive binding and are unchanged.
+
 ## Fork Additions: Cloud Save (Google Drive)
 The Settings tab has a "Cloud Save" section with Save to Cloud / Load from Cloud buttons. The save is stored in the hidden per-app `appDataFolder` of the signed-in Google account — no file path or picker involved. Signing in with the same Google account on another device gives access to the same cloud save. Saving warns before overwriting a cloud save that looks further progressed (by resets, then days); loading confirms before replacing the local game and then reloads the page.
 
