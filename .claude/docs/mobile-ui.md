@@ -57,11 +57,12 @@ desktop `.msgQueue` .75rem rule). Header spans (Clear/Clear All/gear) drop their
 .7rem. `#msgQueueFilters` drops its .875rem/nowrap-hscroll behavior: inherit size,
 wrapping lines showing all categories, .75rem gaps.
 
-Step 5 (action buttons): `.main .content .action` buttons (city/space/research —
-all tabs share the class) go full pane width, font .7rem, padding .3em/.5em,
-tighter margins; count badge, on/off toggles, and the special (gear) box shrink
-proportionally. Flair icons keep their fixed rem offsets — may need attention on
-very compact buttons.
+Step 5 (action buttons): `.main .content .action` wrappers (city/space/research —
+all tabs share the class) get `width: 32.9%` (three per row; not a full third
+because the inline-block wrappers have whitespace gaps) with the button at
+`calc(100% - .375rem)` and font .75rem. Shapes, margins, padding, and the count/
+on/off/gear adornments are upstream defaults — user wants original proportions,
+just denser (was ~2 per row at the fixed 12.625rem width).
 
 ## Known follow-ups (not yet done)
 
