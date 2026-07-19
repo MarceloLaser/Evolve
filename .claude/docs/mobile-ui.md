@@ -65,10 +65,25 @@ on/off/gear adornments are upstream defaults — user wants original proportions
 just denser (was ~2 per row at the fixed 12.625rem width). The on/off power counts
 are `.action` children (siblings of the button) and sized .75rem separately;
 section headers (`h3.name`, e.g. Outskirts) also .75rem; tab strips tightened
-(`.tabs` margin-bottom/ul margin-top .25rem, link padding .25em/.75em).
+(`.tabs` margin-bottom/ul margin-top .25rem, link padding .25em/.75em). Button
+row gap .125rem (top margin); `.space`/`.city`/`.tech` section margin-top .25rem
+(upstream :first-child rules keep first sections at 0); gear `div.special` box
+1rem square with the 12px svg CSS-sized to .6rem.
 
 ## Known follow-ups (not yet done)
 
+- **Small touch targets — do as one sweep** (enlarge hit areas invisibly, e.g. padding
+  + negative margin or ::before overlay; keep visuals unchanged):
+  - Tab strip links (~28px tall after padding reduction)
+  - Building on/off power toggles (~14px)
+  - Building gear/config icon (~16px, `div.special`)
+  - Resource crate/container `+` controls and craft `+1/+5/A` links in the left column
+  - Resource alert checkboxes (native size at .7rem type)
+  - Message log Clear / Clear All / gear (post step 4 sizing)
+- Building buy multiplier: keyboard x10/x25/x100 keys have no mobile equivalent yet
+  (key mappings kept in settings pending this; e.g. a persistent multiplier toggle).
+- Buildings with "flair" icons at fixed rem offsets may crowd titles at the compact
+  button size — tune against a real case when spotted.
 - Tab content panes still use desktop `calc(100vh - …)` heights inside the flow.
 - Landscape phones (> 48rem) still get the cramped desktop two-column layout.
 - Touch interaction model: the game's "Touch Device" setting is mostly dead code due to
