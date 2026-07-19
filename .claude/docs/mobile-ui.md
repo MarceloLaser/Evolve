@@ -97,6 +97,14 @@ Step 6b (population assignment): `#civics` is a Bulma tile row (tiles only flex 
 3rem, compact +/- controls, sshifter and foundry margins tightened. Other Civics
 subtabs (Military/Foreign/Industry) not yet audited.
 
+Step 6c fixes: job `.controls` are `flex: none; white-space: nowrap` (stepper
+glyphs were stacking on squeezed rows like Unemployed); `.bunk`/`.battle` garrison
+rows get `margin: 0` (they are Bulma .columns with negative margins and non-.column
+children — tightening `.bunks` margin in 6a caused left-edge clipping of
+Soldiers/Wounded); mercenary button compact + `margin-left: auto`; section header
+h2s .75rem; foreign `.glabel`/`.glevel` fixed widths (9rem/8rem) → auto so values
+sit beside labels.
+
 ## Known follow-ups (not yet done)
 
 - **Small touch targets — do as one sweep** (enlarge hit areas invisibly, e.g. padding

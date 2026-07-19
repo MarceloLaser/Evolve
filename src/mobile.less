@@ -312,8 +312,12 @@
             }
         }
 
+        // Never let the two stepper glyphs wrap onto separate lines when a long
+        // label (e.g. Unemployed) squeezes the row — shrink the label instead
         .controls {
             font-size: .65rem;
+            flex: none;
+            white-space: nowrap;
 
             .add,
             .sub {
@@ -377,6 +381,43 @@
 
         .bunks {
             margin: .25rem .25rem 0;
+        }
+
+        // These rows are Bulma .columns whose negative side margins clipped the
+        // left edge (their children are not .column elements with the padding
+        // that normally compensates)
+        .bunk,
+        .battle {
+            margin: 0;
+        }
+
+        // Compact mercenary button pushed to the row's right edge
+        .hire {
+            margin-left: auto;
+
+            button {
+                height: 1.25rem;
+                padding: 0 .4rem;
+            }
+        }
+    }
+
+    // Section headers (Government, Garrison, Foreign Powers) match the base size
+    .main .government .header h2,
+    .main .garrison .header h2 {
+        font-size: .75rem;
+    }
+
+    // Foreign power stats fit label + value on one line at the reduced font
+    // (upstream fixes .glabel at 9rem / .glevel at 8rem, forcing values to wrap)
+    .main .government .foreign {
+        .glabel {
+            width: auto;
+            min-width: 6rem;
+        }
+
+        .glevel {
+            width: auto;
         }
     }
 
