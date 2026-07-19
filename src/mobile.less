@@ -163,6 +163,41 @@
         padding: 0 .25rem 0 .25rem;
     }
 
+    // ---- Building / research action buttons ----
+    // Upstream fixes these at 12.625rem wide with desktop type; on mobile they fill
+    // the pane width and shrink typographically (Bulma buttons are em-sized).
+    // Prefix .main .content is required to match upstream nesting specificity
+    .main .content .action {
+        a.button,
+        span.oldTech {
+            width: 100%;
+            margin: .25rem 0 0 0;
+            font-size: .7rem;
+            padding: .3em .5em;
+
+            span.count {
+                height: .9rem;
+                line-height: .75rem;
+            }
+        }
+
+        .aTitle {
+            line-height: .85rem;
+        }
+
+        span.on,
+        span.off {
+            height: .9rem;
+            line-height: .7rem;
+        }
+
+        div.special {
+            height: 1rem;
+            line-height: .8rem;
+            width: 1.1rem;
+        }
+    }
+
     // ---- Settings tab compaction ----
 
     #settings {

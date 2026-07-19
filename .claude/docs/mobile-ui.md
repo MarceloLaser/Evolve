@@ -57,6 +57,12 @@ desktop `.msgQueue` .75rem rule). Header spans (Clear/Clear All/gear) drop their
 .7rem. `#msgQueueFilters` drops its .875rem/nowrap-hscroll behavior: inherit size,
 wrapping lines showing all categories, .75rem gaps.
 
+Step 5 (action buttons): `.main .content .action` buttons (city/space/research —
+all tabs share the class) go full pane width, font .7rem, padding .3em/.5em,
+tighter margins; count badge, on/off toggles, and the special (gear) box shrink
+proportionally. Flair icons keep their fixed rem offsets — may need attention on
+very compact buttons.
+
 ## Known follow-ups (not yet done)
 
 - Tab content panes still use desktop `calc(100vh - …)` heights inside the flow.
