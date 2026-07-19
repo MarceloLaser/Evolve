@@ -81,7 +81,9 @@ on/off/gear adornments are upstream defaults — user wants original proportions
 just denser (was ~2 per row at the fixed 12.625rem width). The on/off power counts
 are `.action` children (siblings of the button) and sized .75rem separately;
 section headers (`h3.name`, e.g. Outskirts) also .75rem; tab strips tightened
-(`.tabs` margin-bottom/ul margin-top .25rem, link padding .25em/.75em). Button
+(`.tabs` font .8rem, margin-bottom/ul margin-top .25rem, link padding .25em/.5em,
+first link padding-left .125rem, resTabs ul margin-left 0 — goal: all main tab
+headers visible without sideways scroll). Button
 row gap .125rem (top margin); `.space`/`.city`/`.tech` section margin-top .25rem
 (upstream :first-child rules keep first sections at 0); gear `div.special` box
 1rem square with the 12px svg CSS-sized to .6rem.

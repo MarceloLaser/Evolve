@@ -168,7 +168,7 @@
 
     // Subtab strips (Town/Space/... inside Civilization etc.) have a 1rem indent
     .resTabs .tabs > ul {
-        margin-left: .25rem;
+        margin-left: 0;
     }
 
     // Tab panes scroll with the page, not internally: natural height removes the
@@ -266,8 +266,14 @@
         font-size: .75rem;
     }
 
-    // Tighten the gap between a tab strip and its subtab headers
+    // Tighten the gap between a tab strip and its subtab headers, shrink the header
+    // font slightly, and start the first header at the pane edge — goal: all main
+    // tabs on screen without sideways scrolling
     .main .content {
+        .tabs {
+            font-size: .8rem;
+        }
+
         .tabs:not(:last-child) {
             margin-bottom: .25rem;
         }
@@ -277,7 +283,11 @@
         }
 
         .tabs a {
-            padding: .25em .75em;
+            padding: .25em .5em;
+        }
+
+        .tabs li:first-child a {
+            padding-left: .125rem;
         }
     }
 
