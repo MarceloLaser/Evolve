@@ -86,8 +86,10 @@
         font-size: .7rem;
     }
 
-    // Clear / Clear All / gear sized to match the Message Log heading
-    #msgQueueHeader {
+    // Clear / Clear All / gear sized to match the Message Log heading.
+    // The .main prefix is required: upstream nests these rules under .main, so an
+    // unprefixed selector loses the cascade despite mobile.less loading last
+    .main #msgQueueHeader {
         span {
             font-size: inherit;
             margin-left: .5rem;
@@ -101,7 +103,7 @@
 
     // Category filters: match the heading size, and lay all categories out in
     // wrapping lines instead of a sideways scroller
-    #msgQueueFilters {
+    .main #msgQueueFilters {
         font-size: inherit;
         white-space: normal;
         overflow-x: visible;
