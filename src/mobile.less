@@ -2,11 +2,10 @@
 // it is attached by a single @import at the end of evolve.less so upstream merges stay
 // clean. Never edit upstream style blocks for mobile behavior; add rules here instead.
 //
-// Context: below Bulma's tablet breakpoint (48rem) the game's two columns stack
-// vertically in DOM order (left column first) and the document cannot scroll
-// (html overflow-y hidden), which strands the tab strip and all tab content off
-// screen. These rules reorder the stack so game content comes first, restore
-// document scrolling, and cap the side panes' viewport-sized heights.
+// Layout model (Kittens Game style): left third of the screen is a pinned column with
+// the race header, message log, and resource list in compact type; right two thirds is
+// the normal tab strip and tab content. The page can scroll vertically for tall tab
+// content; the left column is sticky so the meta information stays on screen.
 
 @media only screen and (max-width: 48rem) {
     html {
@@ -25,42 +24,94 @@
 
     .main {
         overflow-y: visible;
-        margin: 1.5rem .5rem 1rem;
+        margin: 1.5rem .25rem 1rem;
     }
 
+    // Bulma stacks .columns below its tablet breakpoint; restore a side-by-side row
+    // at a one-third / two-thirds split
     .main > .columns {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
 
         > .column {
             flex: none;
-            width: 100% !important;
-            min-width: 0;
+            min-width: 0 !important;
         }
     }
 
-    // Game content first, resource/log column second
-    #mainColumn {
-        order: 1;
+    .main > .columns > .leftColumn {
+        width: 33.5% !important;
+        // Pinned while the page scrolls through tall tab content
+        position: sticky;
+        top: 1.2rem;
+        align-self: flex-start;
+        height: ~"calc(100vh - 2rem)" !important;
+        // Internal layout: race header + queues fixed, resources take the remainder
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
     }
+
+    #mainColumn {
+        width: 66.5% !important;
+    }
+
+    // ---- Left column minification ----
 
     .main .leftColumn {
-        order: 2;
-        height: auto;
+        font-size: .7rem;
+
+        h2, h3, .res {
+            font-size: inherit;
+        }
+
+        // Race header (name / morale / cap timer / power) wraps into short lines
+        .colHeader {
+            flex-wrap: wrap;
+            column-gap: .5rem;
+        }
     }
 
-    // These panes keep their own scrollbars; !important is required to beat the inline
-    // heights main.js applies from saved settings and its resize handler
-    #msgQueue {
-        height: 12rem !important;
-    }
-
+    // Fixed-size panes; !important beats the inline heights main.js applies from
+    // saved settings and its resize handler
     #buildQueue {
         height: 7rem !important;
     }
 
-    #resources {
-        height: 50vh !important;
+    #msgQueue {
+        height: 9rem !important;
+    }
+
+    // Resources fill whatever height remains in the pinned column and scroll internally
+    .main .leftColumn .resources {
+        flex: 1 1 auto;
+        min-height: 0;
+        height: auto !important;
+        margin-top: .25rem;
+    }
+
+    // Resource rows: two compact lines — name + count on top, controls + rate below
+    .resources .resource {
+        flex-wrap: wrap;
+
+        > div {
+            width: 100%;
+        }
+
+        > :nth-child(2) {
+            width: auto;
+            text-align: left;
+        }
+
+        > :nth-child(3) {
+            width: auto;
+            margin-left: auto;
+        }
+
+        .craftable {
+            width: auto;
+            margin-left: auto;
+        }
     }
 
     // The tab strip overflows on narrow screens; scroll sideways instead of clipping

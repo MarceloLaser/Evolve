@@ -17,18 +17,22 @@ never obstruct that:
   (matches upstream's own mobile breakpoint). If JS ever becomes unavoidable, put it in
   a new fork-owned module and wire it with a minimal single-line hook.
 
-## Current state (step 1, 2026-07)
+## Current state (step 2, 2026-07: Kittens-style split)
 
-Root cause of the broken portrait layout: Bulma stacks `.columns` below 48rem in DOM
-order (left column first), `html { overflow-y: hidden }` prevents document scroll, and
-the left column + panes are viewport-height — so `#mainColumn` (tab strip + all
-content) rendered off-screen and unreachable.
+Background: Bulma stacks `.columns` below 48rem in DOM order and `html` has
+`overflow-y: hidden`, which stranded `#mainColumn` off screen (step 1 problem).
 
-`mobile.less` currently: restores `html` vertical scroll (mobile only); flex-column
-reorders `.main > .columns` so `#mainColumn` is first and `.leftColumn` (log +
-resources) second, both full width; caps pane heights (`#msgQueue` 12rem,
-`#buildQueue` 7rem, `#resources` 50vh, `!important` to beat inline styles); makes
-`.topBar` and the `.tabs` strip horizontally scrollable instead of clipped.
+`mobile.less` now builds a side-by-side layout: `.main > .columns` forced back to a
+flex row with `.leftColumn` at 33.5% width and `#mainColumn` at 66.5%. The left column
+is `position: sticky` (pinned below the top bar, `height: calc(100vh - 2rem)`) and is
+itself a flex column: race header + `#buildQueue` (7rem) + `#msgQueue` (9rem) fixed,
+`.resources` takes the remaining height (`flex: 1; min-height: 0; height: auto
+!important` to beat main.js inline heights) with its own scroll. Left column type is
+minified to .7rem (h3/.res overridden — the global `h3 { font-size: 1rem }` rule
+would otherwise win). Resource rows wrap to two lines: name + count on top,
+crate/craft controls + rate on a second right-aligned line. Page scrolls vertically
+for tall tab content; `.topBar` and the `.tabs` strip scroll sideways instead of
+clipping.
 
 ## Known follow-ups (not yet done)
 
