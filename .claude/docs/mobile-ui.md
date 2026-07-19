@@ -61,10 +61,11 @@ Step 5 (action buttons): the region containers (`.city`/`.space`/`.tech` — use
 uniformly across city/space/interstellar/portal/eden/tauceti/research) are
 flex-wrap grids on mobile; the classless first `<div>` (section header) gets
 `width: 100%`. Flex ignores whitespace text nodes, so `.action` wrappers are an
-exact `width: 25%` (four per row, no right-edge slack; in the few non-flexed
-containers like #evolution the same width yields 3 per row due to whitespace
-gaps — acceptable). Button `calc(100% - .125rem)`, margins .125rem (tight gaps),
-button font .75rem, `.aTitle` .7rem.
+exact `width: 33.33%` (three per row — four proved too cramped; in the few
+non-flexed containers like #evolution whitespace gaps drop it to 2 per row —
+acceptable). Button `calc(100% - .125rem)`, margins .125rem (tight gaps), button
+font .75rem, `.aTitle` .7rem, all three counts (total/on/off) .7rem. `span.on`
+re-anchored `right: .125rem` (upstream .375rem matched the old button margin).
 
 Step 5b (edge reclamation): `.main` side margins .125rem, `#mainColumn` divider
 padding .25rem, tab-item/tab-content paddings 0. Tab panes are natural height on

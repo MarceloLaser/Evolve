@@ -206,13 +206,17 @@
     }
 
     .main .content .action {
-        width: 25%;
+        width: 33.33%;
 
         a.button,
         span.oldTech {
             width: ~"calc(100% - .125rem)";
             margin: .125rem .125rem 0 0;
             font-size: .75rem;
+
+            span.count {
+                font-size: .7rem;
+            }
         }
 
         .aTitle {
@@ -223,7 +227,13 @@
         // On/off counts are siblings of the button, not children — size them to match
         span.on,
         span.off {
-            font-size: .75rem;
+            font-size: .7rem;
+        }
+
+        // Upstream anchors the on count at right .375rem to clear the old button
+        // margin; ours is .125rem, so re-anchor flush with the button edge
+        span.on {
+            right: .125rem;
         }
 
         // Gear (config modal) icon sized to match the on/off/total numbers; its
