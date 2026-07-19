@@ -81,7 +81,36 @@
     }
 
     #msgQueue {
-        height: 9rem !important;
+        height: 10rem !important;
+        // One step below the desktop .75rem message size
+        font-size: .7rem;
+    }
+
+    // Clear / Clear All / gear sized to match the Message Log heading
+    #msgQueueHeader {
+        span {
+            font-size: inherit;
+            margin-left: .5rem;
+        }
+
+        .special svg {
+            width: .7rem;
+            height: .7rem;
+        }
+    }
+
+    // Category filters: match the heading size, and lay all categories out in
+    // wrapping lines instead of a sideways scroller
+    #msgQueueFilters {
+        font-size: inherit;
+        white-space: normal;
+        overflow-x: visible;
+        overflow-y: visible;
+        line-height: 1.5;
+
+        span:not(:last-child) {
+            margin-right: .75rem;
+        }
     }
 
     // Resources fill whatever height remains in the pinned column and scroll internally

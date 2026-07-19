@@ -51,6 +51,12 @@ has .5rem left padding as a pane divider. The tab-mappings section is hidden on
 mobile via `.importExport:has(#showCivKey)` (keyboard shortcuts, meaningless on
 touch); key mappings kept pending a mobile replacement for the multiplier keys.
 
+Step 4 (message log): `#msgQueue` 10rem tall, messages .7rem (one step below the
+desktop `.msgQueue` .75rem rule). Header spans (Clear/Clear All/gear) drop their
+1rem override to `inherit` and the gear svg (fixed 12px attrs) is CSS-sized to
+.7rem. `#msgQueueFilters` drops its .875rem/nowrap-hscroll behavior: inherit size,
+wrapping lines showing all categories, .75rem gaps.
+
 ## Known follow-ups (not yet done)
 
 - Tab content panes still use desktop `calc(100vh - …)` heights inside the flow.
