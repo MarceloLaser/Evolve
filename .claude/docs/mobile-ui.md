@@ -64,7 +64,14 @@ flex-wrap grids on mobile; the classless first `<div>` (section header) gets
 exact `width: 25%` (four per row, no right-edge slack; in the few non-flexed
 containers like #evolution the same width yields 3 per row due to whitespace
 gaps — acceptable). Button `calc(100% - .125rem)`, margins .125rem (tight gaps),
-button font .75rem, `.aTitle` .7rem. The tab-content/tab-item gutter overrides
+button font .75rem, `.aTitle` .7rem.
+
+Step 5b (edge reclamation): `.main` side margins .125rem, `#mainColumn` divider
+padding .25rem, tab-item/tab-content paddings 0. Tab panes are natural height on
+mobile (`position: static; height: auto !important; overflow-y: visible` on
+`.sticky`, `.mtab`, `.resTabs > section`, `.govTabs2 > section`, `.settings`,
+`#evolution`) so the inner scrollbar no longer occupies the right edge; content
+scrolls with the page. The tab-content/tab-item gutter overrides
 and the `.resTabs` subtab strip indent are fixed at .25rem — NOTE: the gutter rules
 MUST carry the `.main` prefix (upstream nests under `.main .content`; unprefixed
 versions silently lose the cascade — this bug shipped once). Gear `div.special`
@@ -92,7 +99,10 @@ row gap .125rem (top margin); `.space`/`.city`/`.tech` section margin-top .25rem
   (key mappings kept in settings pending this; e.g. a persistent multiplier toggle).
 - Buildings with "flair" icons at fixed rem offsets may crowd titles at the compact
   button size — tune against a real case when spotted.
-- Tab content panes still use desktop `calc(100vh - …)` heights inside the flow.
+- Tab strips scroll away with the page now that panes are natural-height (step 5b
+  made `.sticky`/`.mtab`/resTabs+govTabs2 sections/`.settings`/#evolution static,
+  height auto). Consider making the tab strips position: sticky on mobile so
+  switching tabs doesn't require scrolling back up.
 - Landscape phones (> 48rem) still get the cramped desktop two-column layout.
 - Touch interaction model: the game's "Touch Device" setting is mostly dead code due to
   an operator-precedence bug (`userAgent.match(/Mobi/ && global.settings.touch)`) in

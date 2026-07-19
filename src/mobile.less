@@ -24,7 +24,7 @@
 
     .main {
         overflow-y: visible;
-        margin: 1.5rem .25rem 1rem;
+        margin: 1.5rem .125rem 1rem;
     }
 
     // Bulma stacks .columns below its tablet breakpoint; restore a side-by-side row
@@ -55,7 +55,7 @@
     // Small gutter so the two panes read as separate entities
     #mainColumn {
         width: 66.5% !important;
-        padding-left: .5rem;
+        padding-left: .25rem;
     }
 
     // ---- Left column minification ----
@@ -158,16 +158,30 @@
     // the cascade against unprefixed selectors
 
     .main .content .tab-item {
-        padding: 0 0 0 .25rem;
+        padding: 0;
     }
 
+    .main .content .tab-content,
     .main .content > .tab-content {
-        padding: 0 .25rem 0 .25rem;
+        padding: 0;
     }
 
     // Subtab strips (Town/Space/... inside Civilization etc.) have a 1rem indent
     .resTabs .tabs > ul {
         margin-left: .25rem;
+    }
+
+    // Tab panes scroll with the page, not internally: natural height removes the
+    // inner scrollbar that was stealing right-edge pixels (left column stays sticky)
+    .main .content .sticky,
+    .main .resTabs > section,
+    .main .govTabs2 > section,
+    .main .content .mtab,
+    .main .content .settings,
+    #evolution {
+        position: static;
+        height: auto !important;
+        overflow-y: visible;
     }
 
     // ---- Building / research action buttons ----
