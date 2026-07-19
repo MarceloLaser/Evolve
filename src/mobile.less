@@ -1,0 +1,71 @@
+// Fork-only mobile layout overrides. ALL mobile-friendliness rules live in this file —
+// it is attached by a single @import at the end of evolve.less so upstream merges stay
+// clean. Never edit upstream style blocks for mobile behavior; add rules here instead.
+//
+// Context: below Bulma's tablet breakpoint (48rem) the game's two columns stack
+// vertically in DOM order (left column first) and the document cannot scroll
+// (html overflow-y hidden), which strands the tab strip and all tab content off
+// screen. These rules reorder the stack so game content comes first, restore
+// document scrolling, and cap the side panes' viewport-sized heights.
+
+@media only screen and (max-width: 48rem) {
+    html {
+        overflow-y: auto;
+    }
+
+    body {
+        overflow-x: hidden;
+    }
+
+    // Fixed one-line bar; allow sideways swipe instead of clipping on narrow screens
+    .topBar {
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
+    .main {
+        overflow-y: visible;
+        margin: 1.5rem .5rem 1rem;
+    }
+
+    .main > .columns {
+        display: flex;
+        flex-direction: column;
+
+        > .column {
+            flex: none;
+            width: 100% !important;
+            min-width: 0;
+        }
+    }
+
+    // Game content first, resource/log column second
+    #mainColumn {
+        order: 1;
+    }
+
+    .main .leftColumn {
+        order: 2;
+        height: auto;
+    }
+
+    // These panes keep their own scrollbars; !important is required to beat the inline
+    // heights main.js applies from saved settings and its resize handler
+    #msgQueue {
+        height: 12rem !important;
+    }
+
+    #buildQueue {
+        height: 7rem !important;
+    }
+
+    #resources {
+        height: 50vh !important;
+    }
+
+    // The tab strip overflows on narrow screens; scroll sideways instead of clipping
+    .tabs:not(:last-child) {
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+}

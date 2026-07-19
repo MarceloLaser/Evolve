@@ -9,3 +9,5 @@ each is scoped to one system. Load the relevant file before working on:
   read `.claude/docs/message-log.md`
 - **Cloud save, Google Drive sync, OAuth/sign-in, settings-tab save buttons** →
   read `.claude/docs/cloud-save.md`
+- **Mobile layout, responsive/portrait fixes, touch support** →
+  read `.claude/docs/mobile-ui.md` (contains a MANDATORY compartmentalization policy)

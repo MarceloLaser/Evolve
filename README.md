@@ -26,6 +26,9 @@ The version display in the top bar checks upstream (`pmotschmann.github.io/Evolv
 
 Additionally, in the GruvBox Dark theme, resources with an armed alert checkbox turn light red when above 85% of their capacity and stay red even at max (instead of the standard yellow near-max color); this updates immediately when the checkbox is toggled. Unchecked resources keep the game's default coloring. The threshold class (`near-cap`) and alert class (`res-alert`) are applied for all themes in `src/main.js`/`src/resources.js`, but only GruvBox Dark styles them (`src/evolve.less`).
 
+## Fork Additions: Mobile Layout (work in progress)
+On screens narrower than 48rem the layout reflows for portrait phones: the tab strip and game content come first, with the message log and resource list stacked below (each with its own capped, scrollable pane), the page scrolls vertically, and the top bar and tab strip scroll sideways instead of clipping. All mobile rules live in `src/mobile.less`, attached by a single `@import` at the end of `src/evolve.less`, so upstream merges stay clean — see `.claude/docs/mobile-ui.md` for the policy. Desktop rendering is unchanged.
+
 ## Fork Additions: Live Tooltips
 Research and evolution tooltips refresh once per second while open, so the "ready in" affordability countdown at the bottom counts down without needing mouse movement (cost coloring updates too). Building tooltips already had live timers via the game's own reactive binding and are unchanged.
 
