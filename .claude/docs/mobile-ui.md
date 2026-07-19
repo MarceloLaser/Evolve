@@ -34,6 +34,12 @@ crate/craft controls + rate on a second right-aligned line. Page scrolls vertica
 for tall tab content; `.topBar` and the `.tabs` strip scroll sideways instead of
 clipping.
 
+Step 3 (settings density): mobile block compacts `#settings` — base font .75rem
+(Buefy switch tracks are em-sized so they shrink with it), one toggle per line,
+smaller buttons/dropdown items/labels/textarea, tighter section margins, smaller
+`.keyMap`/`.msgInput` inputs, and `.tab-item`/`.tab-content` left gutters reduced
+from 1rem to .25rem for all tabs.
+
 ## Known follow-ups (not yet done)
 
 - Tab content panes still use desktop `calc(100vh - …)` heights inside the flow.
