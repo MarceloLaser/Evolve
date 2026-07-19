@@ -154,13 +154,20 @@
     }
 
     // ---- Tab content: reclaim the desktop left gutters ----
+    // .main prefix required — upstream nests these under .main .content and wins
+    // the cascade against unprefixed selectors
 
-    .content .tab-item {
+    .main .content .tab-item {
         padding: 0 0 0 .25rem;
     }
 
-    .content > .tab-content {
+    .main .content > .tab-content {
         padding: 0 .25rem 0 .25rem;
+    }
+
+    // Subtab strips (Town/Space/... inside Civilization etc.) have a 1rem indent
+    .resTabs .tabs > ul {
+        margin-left: .25rem;
     }
 
     // ---- Building / research action buttons ----
@@ -169,7 +176,7 @@
     // inline-blocks, so 32.9% (not a full third) absorbs the whitespace gaps between
     // them. Prefix .main .content is required to match upstream nesting specificity
     .main .content .action {
-        width: 32.9%;
+        width: 24.7%;
 
         a.button,
         span.oldTech {
@@ -188,8 +195,11 @@
             font-size: .75rem;
         }
 
-        // Gear (config modal) icon sized to match the on/off/total numbers
+        // Gear (config modal) icon sized to match the on/off/total numbers; its
+        // desktop top offset (.5rem) lands mid-button at compact size, so pin it
+        // to the top-left corner
         div.special {
+            top: 0;
             height: 1rem;
             width: 1rem;
             line-height: .75rem;

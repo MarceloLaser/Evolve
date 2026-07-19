@@ -58,9 +58,13 @@ desktop `.msgQueue` .75rem rule). Header spans (Clear/Clear All/gear) drop their
 wrapping lines showing all categories, .75rem gaps.
 
 Step 5 (action buttons): `.main .content .action` wrappers (city/space/research —
-all tabs share the class) get `width: 32.9%` (three per row; not a full third
+all tabs share the class) get `width: 24.7%` (four per row; not a full quarter
 because the inline-block wrappers have whitespace gaps) with the button at
-`calc(100% - .375rem)` and font .75rem. Shapes, margins, padding, and the count/
+`calc(100% - .375rem)` and font .75rem. The tab-content/tab-item gutter overrides
+and the `.resTabs` subtab strip indent are fixed at .25rem — NOTE: the gutter rules
+MUST carry the `.main` prefix (upstream nests under `.main .content`; unprefixed
+versions silently lose the cascade — this bug shipped once). Gear `div.special`
+pinned `top: 0` (desktop .5rem offset overlapped the off count at compact size). Shapes, margins, padding, and the count/
 on/off/gear adornments are upstream defaults — user wants original proportions,
 just denser (was ~2 per row at the fixed 12.625rem width). The on/off power counts
 are `.action` children (siblings of the button) and sized .75rem separately;
