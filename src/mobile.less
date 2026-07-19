@@ -301,9 +301,11 @@
         font-size: .7rem;
 
         .job_label {
+            // Fixed name column so the +/- steppers align vertically across rows
+            // regardless of label length (Unemployed is the longest)
             :first-child {
-                width: auto;
-                min-width: 5.5rem;
+                width: 6.5rem;
+                min-width: 0;
                 font-size: .7rem;
             }
 
@@ -364,6 +366,7 @@
 
             :first-child {
                 line-height: 1rem;
+                font-size: .75rem;
             }
         }
     }
@@ -391,13 +394,24 @@
             margin: 0;
         }
 
-        // Compact mercenary button pushed to the row's right edge
-        .hire {
+        // Compact mercenary button pushed to the row's right edge; upstream gives
+        // it a 1rem top margin at .bunk .hire depth
+        .bunk .hire {
             margin-left: auto;
+            margin-top: 0;
 
             button {
                 height: 1.25rem;
                 padding: 0 .4rem;
+            }
+        }
+
+        // Reclaim the desktop air between the soldier counts and the campaign rows
+        .war {
+            margin: .25rem .25rem 0;
+
+            .tactics {
+                margin: .25rem 0;
             }
         }
     }
@@ -411,9 +425,10 @@
     // Foreign power stats fit label + value on one line at the reduced font
     // (upstream fixes .glabel at 9rem / .glevel at 8rem, forcing values to wrap)
     .main .government .foreign {
+        // Floor must fit the longest label (Economic Strength) so values align
         .glabel {
             width: auto;
-            min-width: 6rem;
+            min-width: 7.5rem;
         }
 
         .glevel {

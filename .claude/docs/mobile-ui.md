@@ -103,7 +103,10 @@ rows get `margin: 0` (they are Bulma .columns with negative margins and non-.col
 children — tightening `.bunks` margin in 6a caused left-edge clipping of
 Soldiers/Wounded); mercenary button compact + `margin-left: auto`; section header
 h2s .75rem; foreign `.glabel`/`.glevel` fixed widths (9rem/8rem) → auto so values
-sit beside labels.
+sit beside labels (glabel min 7.5rem = longest label, aligns the three values).
+Job name column fixed 6.5rem so steppers align across rows; taxRate label
+(`h3#taxRateLabel`, was global 1rem) .75rem; `.bunk .hire` margin-top 0 (upstream
+1rem, note the depth — `.garrison .hire` alone loses); `.war` margins .25rem.
 
 ## Known follow-ups (not yet done)
 
