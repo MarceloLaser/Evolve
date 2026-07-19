@@ -278,16 +278,15 @@
             margin-bottom: .25rem;
         }
 
+        // Bulma's .content typography gives every ul a 2em left margin — that was
+        // the main strip's indent (subtab uls have their own upstream override)
         .tabs ul {
             margin-top: .25rem;
+            margin-left: 0;
         }
 
         .tabs a {
             padding: .25em .5em;
-        }
-
-        .tabs li:first-child a {
-            padding-left: .125rem;
         }
     }
 

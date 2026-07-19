@@ -82,8 +82,10 @@ just denser (was ~2 per row at the fixed 12.625rem width). The on/off power coun
 are `.action` children (siblings of the button) and sized .75rem separately;
 section headers (`h3.name`, e.g. Outskirts) also .75rem; tab strips tightened
 (`.tabs` font .8rem, margin-bottom/ul margin-top .25rem, link padding .25em/.5em,
-first link padding-left .125rem, resTabs ul margin-left 0 — goal: all main tab
-headers visible without sideways scroll). Button
+`.tabs ul` margin-left 0 — Bulma `.content ul` typography adds a 2em indent that
+was the main strip's left gap; subtab uls had upstream's own 1rem override, also
+zeroed. No first-child link trim: the main strip's first li is the hidden
+Evolution tab, so per-first-child rules misalign main vs subtabs). Button
 row gap .125rem (top margin); `.space`/`.city`/`.tech` section margin-top .25rem
 (upstream :first-child rules keep first sections at 0); gear `div.special` box
 1rem square with the 12px svg CSS-sized to .6rem.
