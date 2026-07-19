@@ -36,12 +36,15 @@ clipping.
 
 Step 3 (settings density): mobile block compacts `#settings` — base font .75rem,
 buttons and dropdown triggers .65rem/1.25rem tall, switches .7rem (Buefy tracks are
-em-sized so they shrink with font), one toggle per line, smaller dropdown
+em-sized so they shrink with font; toggles flow inline and wrap), smaller dropdown
 items/labels/textarea, tighter section margins, smaller `.keyMap`/`.msgInput`
 inputs, and `.tab-item`/`.tab-content` left gutters reduced from 1rem to .25rem for
-all tabs. The tab-mappings section is hidden on mobile via
-`.importExport:has(#showCivKey)` (keyboard shortcuts, meaningless on touch); key
-mappings kept pending a mobile replacement for the multiplier functionality.
+all tabs. `.queue`/`.theme`/`.localization` use a 2-col grid (label | dropdown) so a
+label always shares its row with its dropdown and wraps within its own cell. The
+`.stringPack` row is flex so the file picker aligns with its buttons. `#mainColumn`
+has .5rem left padding as a pane divider. The tab-mappings section is hidden on
+mobile via `.importExport:has(#showCivKey)` (keyboard shortcuts, meaningless on
+touch); key mappings kept pending a mobile replacement for the multiplier keys.
 
 ## Known follow-ups (not yet done)
 
