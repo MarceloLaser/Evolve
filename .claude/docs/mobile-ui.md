@@ -9,6 +9,10 @@ never obstruct that:
   it). It is attached by a single `@import 'mobile';` as the LAST line of
   `src/evolve.less` — the only upstream-file edit allowed for mobile styling. If a merge
   drops that line, just re-add it.
+- Mobile JS helpers live in `src/mobile.js` (fork-owned). Current hooks: one import +
+  one `pairSettingDropdowns(settings)` call in `index.js` before `tabs.append(settings)`
+  (wraps settings label+dropdown pairs in `.setPair` spans pre-Vue-compile). If a merge
+  drops the hooks, re-add those two lines.
 - Do NOT edit upstream style blocks in `evolve.less` for mobile behavior, and do NOT
   change `main.js` layout/resize logic. Where main.js sets inline heights
   (`#msgQueue`, `#buildQueue`, `#resources` via saved settings + resizeGame), override
@@ -39,8 +43,9 @@ buttons and dropdown triggers .65rem/1.25rem tall, switches .7rem (Buefy tracks 
 em-sized so they shrink with font; toggles flow inline and wrap), smaller dropdown
 items/labels/textarea, tighter section margins, smaller `.keyMap`/`.msgInput`
 inputs, and `.tab-item`/`.tab-content` left gutters reduced from 1rem to .25rem for
-all tabs. `.queue`/`.theme`/`.localization` use a 2-col grid (label | dropdown) so a
-label always shares its row with its dropdown and wraps within its own cell. The
+all tabs. Settings label+dropdown pairs are wrapped in `.setPair` spans by `mobile.js`
+(pre-mount) and styled inline-flex on mobile: pairs pack per line when they fit and
+wrap between pairs, never mid-pair. The
 `.stringPack` row is flex so the file picker aligns with its buttons. `#mainColumn`
 has .5rem left padding as a pane divider. The tab-mappings section is hidden on
 mobile via `.importExport:has(#showCivKey)` (keyboard shortcuts, meaningless on

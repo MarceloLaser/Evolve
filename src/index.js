@@ -15,6 +15,7 @@ import { renderEdenic } from './edenic.js';
 import { drawShipYard, clearShipDrag, renderTauCeti } from './truepath.js';
 import { arpa, clearGeneticsDrag } from './arpa.js';
 import { cloudSave, cloudLoad } from './cloud.js';
+import { pairSettingDropdowns } from './mobile.js';
 
 export function mainVue(){
     vBind({
@@ -1480,6 +1481,7 @@ export function index(){
         </div>
     </b-tab-item>`);
 
+    pairSettingDropdowns(settings);
     tabs.append(settings);
 
     // (Hidden Last Tab) Hell Observation Tab

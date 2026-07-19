@@ -167,18 +167,25 @@
             padding: .25rem .75rem;
         }
 
-        // These groups strictly alternate <span> label / dropdown children; a
-        // two-column grid keeps each label on the same row as its dropdown, and a
-        // long label wraps inside its own cell instead of pushing the dropdown down
         .queue,
         .theme,
         .localization {
-            display: grid;
-            grid-template-columns: auto max-content;
-            justify-content: start;
-            align-items: center;
-            gap: .25rem .375rem;
             margin-bottom: .5rem;
+        }
+
+        // .setPair wrappers are added pre-mount by mobile.js: each label + its
+        // dropdown becomes an atomic inline-flex unit — pairs pack onto a line when
+        // they fit and wrap between pairs, never between a label and its dropdown.
+        // If a single pair exceeds the line, the label text wraps inside its cell
+        .setPair {
+            display: inline-flex;
+            align-items: center;
+            max-width: 100%;
+            margin: 0 .625rem .25rem 0;
+
+            > span:first-child {
+                min-width: 0;
+            }
         }
 
         .importExport,
