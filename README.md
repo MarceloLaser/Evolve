@@ -26,6 +26,11 @@ The version display in the top bar checks upstream (`pmotschmann.github.io/Evolv
 
 Additionally, in the GruvBox Dark theme, resources with an armed alert checkbox turn light red when above 85% of their capacity and stay red even at max (instead of the standard yellow near-max color); this updates immediately when the checkbox is toggled. Unchecked resources keep the game's default coloring. The threshold class (`near-cap`) and alert class (`res-alert`) are applied for all themes in `src/main.js`/`src/resources.js`, but only GruvBox Dark styles them (`src/evolve.less`).
 
+## Fork Additions: Cloud Save (Google Drive)
+The Settings tab has a "Cloud Save" section with Save to Cloud / Load from Cloud buttons. The save is stored in the hidden per-app `appDataFolder` of the signed-in Google account — no file path or picker involved. Signing in with the same Google account on another device gives access to the same cloud save. Saving warns before overwriting a cloud save that looks further progressed (by resets, then days); loading confirms before replacing the local game and then reloads the page.
+
+Setup notes: sign-in uses Google Identity Services (loaded in `index.html`); the OAuth client ID is defined in `src/cloud.js` and its authorized JavaScript origins must include wherever the game is served (currently `http://localhost:4400`). Requires being served over http(s) — `file://` will not work. Access tokens last about an hour; the first click of a session may show a Google popup, after which calls are silent.
+
 ## Submitting Issues
 If you think you have discovered a bug or have some other issue with the game then you can open an issue here on Github.
 Please do not open Github issues to ask gameplay questions, use Reddit or Discord for that.

@@ -7,3 +7,5 @@ each is scoped to one system. Load the relevant file before working on:
   read `.claude/docs/rng-system.md`
 - **Message Log, log categories/filters, log settings modal** →
   read `.claude/docs/message-log.md`
+- **Cloud save, Google Drive sync, OAuth/sign-in, settings-tab save buttons** →
+  read `.claude/docs/cloud-save.md`

@@ -14,6 +14,7 @@ import { renderFortress, buildFortress, drawMechLab, clearMechDrag, drawHellObse
 import { renderEdenic } from './edenic.js';
 import { drawShipYard, clearShipDrag, renderTauCeti } from './truepath.js';
 import { arpa, clearGeneticsDrag } from './arpa.js';
+import { cloudSave, cloudLoad } from './cloud.js';
 
 export function mainVue(){
     vBind({
@@ -32,6 +33,12 @@ export function mainVue(){
                 if ($('#importExport').val().length > 0){
                     importGame($('#importExport').val());
                 }
+            },
+            cloudSaveGame(){
+                cloudSave();
+            },
+            cloudLoadGame(){
+                cloudLoad();
             },
             saveExport(){
                 $('#importExport').val(window.exportGame());
@@ -1448,6 +1455,12 @@ export function index(){
             <button class="button" @click="saveExport">{{ 'export' | label }}</button>
             <button class="button" @click="saveExportFile">{{ 'export_file' | label }}</button>
             <button class="button right" @click="restoreGame"><span class="settings9" aria-label="${loc('settings9')}">{{ 'restore' | label }}</span></button>
+        </div>
+        <div class="importExport">
+            <div>Cloud Save (Google Drive)</div>
+            <button class="button" @click="cloudSaveGame">Save to Cloud</button>
+            <button class="button" @click="cloudLoadGame">Load from Cloud</button>
+            <span id="cloudStatus"></span>
         </div>
         <div class="reset">
             <b-collapse :open="false">
