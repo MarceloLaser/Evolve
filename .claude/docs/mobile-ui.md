@@ -57,10 +57,14 @@ desktop `.msgQueue` .75rem rule). Header spans (Clear/Clear All/gear) drop their
 .7rem. `#msgQueueFilters` drops its .875rem/nowrap-hscroll behavior: inherit size,
 wrapping lines showing all categories, .75rem gaps.
 
-Step 5 (action buttons): `.main .content .action` wrappers (city/space/research —
-all tabs share the class) get `width: 24.7%` (four per row; not a full quarter
-because the inline-block wrappers have whitespace gaps) with the button at
-`calc(100% - .375rem)` and font .75rem. The tab-content/tab-item gutter overrides
+Step 5 (action buttons): the region containers (`.city`/`.space`/`.tech` — used
+uniformly across city/space/interstellar/portal/eden/tauceti/research) are
+flex-wrap grids on mobile; the classless first `<div>` (section header) gets
+`width: 100%`. Flex ignores whitespace text nodes, so `.action` wrappers are an
+exact `width: 25%` (four per row, no right-edge slack; in the few non-flexed
+containers like #evolution the same width yields 3 per row due to whitespace
+gaps — acceptable). Button `calc(100% - .125rem)`, margins .125rem (tight gaps),
+button font .75rem, `.aTitle` .7rem. The tab-content/tab-item gutter overrides
 and the `.resTabs` subtab strip indent are fixed at .25rem — NOTE: the gutter rules
 MUST carry the `.main` prefix (upstream nests under `.main .content`; unprefixed
 versions silently lose the cascade — this bug shipped once). Gear `div.special`

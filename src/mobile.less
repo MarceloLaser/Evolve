@@ -175,18 +175,35 @@
     // per row where the fixed 12.625rem desktop width fit two. The wrappers are
     // inline-blocks, so 32.9% (not a full third) absorbs the whitespace gaps between
     // them. Prefix .main .content is required to match upstream nesting specificity
+    // Region containers become flex grids: flex ignores the whitespace text nodes
+    // between the inline-block wrappers, so four exact quarters fit with no
+    // right-edge slack. The classless first div is the section header — full row
+    .main .content {
+        .city,
+        .space,
+        .tech {
+            display: flex;
+            flex-wrap: wrap;
+
+            > div:not(.action) {
+                width: 100%;
+            }
+        }
+    }
+
     .main .content .action {
-        width: 24.7%;
+        width: 25%;
 
         a.button,
         span.oldTech {
-            width: ~"calc(100% - .375rem)";
-            margin: .125rem .375rem 0 0;
+            width: ~"calc(100% - .125rem)";
+            margin: .125rem .125rem 0 0;
             font-size: .75rem;
         }
 
         .aTitle {
-            line-height: .9rem;
+            font-size: .7rem;
+            line-height: .85rem;
         }
 
         // On/off counts are siblings of the button, not children — size them to match
