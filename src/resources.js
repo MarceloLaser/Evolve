@@ -1089,6 +1089,9 @@ function loadResource(name,wiki,max,rate,tradable,stackable,color){
         methods: {
             selRes(res,event){
                 setResAlert(res,event.target.checked);
+                // A focused checkbox suppresses the game's global hotkeys (main.js
+                // ignores keys while any input has focus)
+                event.target.blur();
             },
             resRate(n){
                 let diff = sizeApproximation(global.resource[n].diff,2);

@@ -306,8 +306,10 @@ vBind({
         name(){
             return flib('name');
         },
-        selAll(){
+        selAll(event){
             setAllResAlerts();
+            // A focused checkbox suppresses the game's global hotkeys
+            event.target.blur();
         }
     },
     filters: {
