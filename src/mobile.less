@@ -281,6 +281,49 @@
         }
     }
 
+    // ---- Civics: Government subtab ----
+
+    .main .government {
+        font-size: .75rem;
+
+        .header {
+            margin-bottom: .25rem;
+        }
+
+        // Selectors must match upstream depth (.government .govType button etc.)
+        .govType button,
+        .foreign button {
+            font-size: .65rem;
+            height: 1.25rem;
+            line-height: 1.25rem;
+            padding: 0 .4rem;
+        }
+
+        .taxRate {
+            height: 1rem;
+
+            :first-child {
+                line-height: 1rem;
+            }
+        }
+    }
+
+    .main .garrison {
+        font-size: .75rem;
+
+        .header {
+            margin-bottom: .25rem;
+        }
+
+        button {
+            font-size: .65rem;
+        }
+
+        .bunks {
+            margin: .25rem .25rem 0;
+        }
+    }
+
     // ---- Settings tab compaction ----
 
     #settings {

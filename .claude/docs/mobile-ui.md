@@ -86,6 +86,12 @@ row gap .125rem (top margin); `.space`/`.city`/`.tech` section margin-top .25rem
 (upstream :first-child rules keep first sections at 0); gear `div.special` box
 1rem square with the 12px svg CSS-sized to .6rem.
 
+Step 6 (Civics → Government): `.main .government` and `.main .garrison` base font
+.75rem, buttons .65rem/1.25rem (selectors at upstream depth: `.govType button`,
+`.foreign button`), tax rate row 1rem, tighter header/bunks margins. First pass —
+awaiting user review; morale/tax add-sub controls and other Civics subtabs
+(Military/Foreign/Industry/Tax modals) untouched so far.
+
 ## Known follow-ups (not yet done)
 
 - **Small touch targets — do as one sweep** (enlarge hit areas invisibly, e.g. padding
