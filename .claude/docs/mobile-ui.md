@@ -88,9 +88,14 @@ row gap .125rem (top margin); `.space`/`.city`/`.tech` section margin-top .25rem
 
 Step 6 (Civics → Government): `.main .government` and `.main .garrison` base font
 .75rem, buttons .65rem/1.25rem (selectors at upstream depth: `.govType button`,
-`.foreign button`), tax rate row 1rem, tighter header/bunks margins. First pass —
-awaiting user review; morale/tax add-sub controls and other Civics subtabs
-(Military/Foreign/Industry/Tax modals) untouched so far.
+`.foreign button`), tax rate row 1rem, tighter header/bunks margins.
+
+Step 6b (population assignment): `#civics` is a Bulma tile row (tiles only flex at
+>=769px, so government content stacked below jobs on mobile) — forced
+`display: flex` with `.jobList` at `flex: 0 0 auto; max-width: 11.5rem`. Job rows
+.7rem with the fixed 10rem/1rem name column shrunk to auto/min 5.5rem, counts min
+3rem, compact +/- controls, sshifter and foundry margins tightened. Other Civics
+subtabs (Military/Foreign/Industry) not yet audited.
 
 ## Known follow-ups (not yet done)
 

@@ -281,6 +281,62 @@
         }
     }
 
+    // ---- Civics: population assignment (jobs) beside government content ----
+    // Bulma tiles only flex at >=769px, so the government tile was stacking below
+    // the jobs list; restore the desktop side-by-side split with a compact job list
+
+    .main #civics {
+        display: flex;
+        padding: .25rem;
+    }
+
+    .main .jobList {
+        flex: 0 0 auto;
+        max-width: 11.5rem;
+    }
+
+    .main .job {
+        margin-left: 0;
+        min-width: 0;
+        font-size: .7rem;
+
+        .job_label {
+            :first-child {
+                width: auto;
+                min-width: 5.5rem;
+                font-size: .7rem;
+            }
+
+            :nth-child(2) {
+                min-width: 3rem;
+            }
+        }
+
+        .controls {
+            font-size: .65rem;
+
+            .add,
+            .sub {
+                padding: 0 .25rem;
+                line-height: .8rem;
+            }
+        }
+    }
+
+    .main .sshifter {
+        margin-left: .25rem;
+
+        button {
+            height: 1.25rem;
+            font-size: .65rem;
+            margin-left: .125rem;
+        }
+    }
+
+    .main .foundry {
+        margin-top: .5rem;
+    }
+
     // ---- Civics: Government subtab ----
 
     .main .government {
