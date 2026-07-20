@@ -319,7 +319,7 @@ Content-Type: text/plain\r
             <button class="mobile-nav-btn" data-panel="game">${t("mobile_nav_game")}</button>
             <button class="mobile-nav-btn" data-panel="queue">${t("mobile_nav_queue")}</button>
         </div>
-    `),$("#mobileNav").on("click",".mobile-nav-btn",function(){let z=$(this).data("panel");$("#main").toggleClass("mobile-panel-game",z==="game").toggleClass("mobile-panel-queue",z==="queue"),$("#mobileNav .mobile-nav-btn").removeClass("is-active"),$(this).addClass("is-active")}),"visualViewport"in window){let z=$("#mobileNav"),F=$(".promoBar"),G=()=>{let se=window.visualViewport,we=window.innerHeight-(se.height+se.offsetTop),ge=-Math.round(Math.max(0,we));z.css("transform",`translateY(${ge}px)`),F.css("transform",`translateY(${ge}px)`)};window.visualViewport.addEventListener("resize",G),window.visualViewport.addEventListener("scroll",G)}$("body").append(`
+    `),$("#mobileNav").on("click",".mobile-nav-btn",function(){let z=$(this).data("panel");$("#main").toggleClass("mobile-panel-game",z==="game").toggleClass("mobile-panel-queue",z==="queue"),$("#mobileNav .mobile-nav-btn").removeClass("is-active"),$(this).addClass("is-active")}),"visualViewport"in window){let z=$("#mobileNav"),F=$(".promoBar"),G=()=>{let se=window.visualViewport;if(se.scale!==1){z.css("transform",""),F.css("transform","");return}let we=window.innerHeight-(se.height+se.offsetTop),ge=-Math.round(Math.max(0,we));z.css("transform",`translateY(${ge}px)`),F.css("transform",`translateY(${ge}px)`)};window.visualViewport.addEventListener("resize",G),window.visualViewport.addEventListener("scroll",G)}$("body").append(`
         <div class="promoBar">
             <span class="left">
                 <h1>
