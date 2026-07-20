@@ -112,6 +112,12 @@ Job name column fixed 6.5rem so steppers align across rows; taxRate label
 (`h3#taxRateLabel`, was global 1rem) .75rem; `.bunk .hire` margin-top 0 (upstream
 1rem, note the depth — `.garrison .hire` alone loses); `.war` margins .25rem.
 
+Step 7 (research queue + transitions): `.main .resQueue` .75rem with the 2rem
+h2/buildList indent zeroed. `#mainColumn` has `overflow-x: hidden` — REQUIRED for
+Buefy's animated tab slides, which the desktop fixed-height panes used to clip;
+without it outgoing tabs slide visibly across the left column. Column height is
+content-driven so the implied overflow-y:auto never adds a scrollbar.
+
 ## Known follow-ups (not yet done)
 
 - **Small touch targets — do as one sweep** (enlarge hit areas invisibly, e.g. padding

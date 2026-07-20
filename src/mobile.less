@@ -52,10 +52,15 @@
         overflow: hidden;
     }
 
-    // Small gutter so the two panes read as separate entities
+    // Small gutter so the two panes read as separate entities. overflow-x hidden
+    // clips Buefy's animated tab transitions at the pane edge — without it the
+    // outgoing tab slides visibly across the left column (the desktop layout's
+    // fixed-height overflow:hidden panes used to provide this clip). The column's
+    // height is content-driven, so the implied overflow-y:auto never scrolls
     #mainColumn {
         width: 66.5% !important;
         padding-left: .25rem;
+        overflow-x: hidden;
     }
 
     // ---- Left column minification ----
@@ -287,6 +292,21 @@
 
         .tabs a {
             padding: .25em .5em;
+        }
+    }
+
+    // ---- Research queue: compact type, no desktop indent ----
+
+    .main .resQueue {
+        font-size: .75rem;
+
+        h2 {
+            font-size: .75rem;
+        }
+
+        h2,
+        .buildList {
+            margin-left: 0;
         }
     }
 
