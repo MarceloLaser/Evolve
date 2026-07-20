@@ -9,10 +9,15 @@ never obstruct that:
   it). It is attached by a single `@import 'mobile';` as the LAST line of
   `src/evolve.less` — the only upstream-file edit allowed for mobile styling. If a merge
   drops that line, just re-add it.
-- Mobile JS helpers live in `src/mobile.js` (fork-owned). Current hooks: one import +
-  one `pairSettingDropdowns(settings)` call in `index.js` before `tabs.append(settings)`
-  (wraps settings label+dropdown pairs in `.setPair` spans pre-Vue-compile). If a merge
-  drops the hooks, re-add those two lines.
+- Mobile JS helpers live in `src/mobile.js` (fork-owned). Current hooks (re-add after
+  any merge that drops them):
+  - `index.js`: import + one `pairSettingDropdowns(settings)` call before
+    `tabs.append(settings)` (wraps settings label+dropdown pairs in `.setPair` spans).
+  - `functions.js`: import `touchMode` + two condition swaps to `if (touchMode()){`
+    (popover unbind ~line 72; document-level touchend popper dismissal ~line 91).
+  - `actions.js`: import `touchMode` + two condition swaps (`action()` direct-buy
+    guard in setAction; `action && a_type && touchMode()` Construct-button gate in
+    actionDesc) + a `touchMode()` early return in fork-added `refreshActionTooltip`.
 - Do NOT edit upstream style blocks in `evolve.less` for mobile behavior, and do NOT
   change `main.js` layout/resize logic. Where main.js sets inline heights
   (`#msgQueue`, `#buildQueue`, `#resources` via saved settings + resizeGame), override
@@ -130,6 +135,18 @@ content-driven so the implied overflow-y:auto never adds a scrollbar.
   - Message log Clear / Clear All / gear (post step 4 sizing)
 - Building buy multiplier: keyboard x10/x25/x100 keys have no mobile equivalent yet
   (key mappings kept in settings pending this; e.g. a persistent multiplier toggle).
+- Touch mode (2026-07): auto-enabled via `touchMode()` in mobile.js —
+  `matchMedia('(hover: none) and (pointer: coarse)')`, cached; engine-agnostic (works
+  on Safari/Firefox/Opera, includes iPads, excludes touchscreen laptops; NO UA
+  sniffing). Replaced upstream's four broken gates (three had
+  `match(/Mobi/ && settings.touch)` precedence bug). Behavior when active: tap opens
+  tooltip, tooltip's Construct button buys (touchstart), direct button tap does NOT
+  buy, popovers dismiss on touchend. `settings.touch` is ignored; its toggle is
+  CSS-hidden everywhere via `label.switch:has(.settings16)` in mobile.less (outside
+  the media query). Research/evolution tooltip auto-refresh is disabled in touch mode
+  (would recreate the Construct button mid-tap). NEEDS REAL-DEVICE VALIDATION:
+  tap-to-open reliability, Construct tap, dismissal not firing on the opening tap —
+  test on at least two engines (e.g. iOS Safari + Android Firefox).
 - Buildings with "flair" icons at fixed rem offsets may crowd titles at the compact
   button size — tune against a real case when spotted.
 - Tab strips scroll away with the page now that panes are natural-height (step 5b
@@ -137,7 +154,4 @@ content-driven so the implied overflow-y:auto never adds a scrollbar.
   height auto). Consider making the tab strips position: sticky on mobile so
   switching tabs doesn't require scrolling back up.
 - Landscape phones (> 48rem) still get the cramped desktop two-column layout.
-- Touch interaction model: the game's "Touch Device" setting is mostly dead code due to
-  an operator-precedence bug (`userAgent.match(/Mobi/ && global.settings.touch)`) in
-  `actions.js` and `functions.js` — see git history / ask before fixing (upstream files).
 - Action grids, modals, and popovers are unaudited on small screens.

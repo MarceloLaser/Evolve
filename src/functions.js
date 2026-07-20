@@ -1,5 +1,6 @@
 import { global, save, message_logs, message_filters, webWorker, keyMultiplier, intervals, resizeGame, atrack, p_on, quantum_level, tmp_vars } from './vars.js';
 import { loc } from './locale.js';
+import { touchMode } from './mobile.js';
 import { races, traits, genus_def, traitSkin, fathomCheck } from './races.js';
 import { actions, actionDesc } from './actions.js';
 import { jobScale } from './jobs.js';
@@ -69,7 +70,7 @@ export function popover(id,content,opts){
         });
     }
     if (opts['unbind']){
-        if ('ontouchstart' in document.documentElement && navigator.userAgent.match(/Mobi/ && global.settings.touch) ? true : false){
+        if (touchMode()){
             $(opts.elm).on('touchend',function(e){
                 clearPopper();
                 if (opts.hasOwnProperty('out') && typeof opts['out'] === 'function'){
@@ -88,7 +89,7 @@ export function popover(id,content,opts){
     }
 }
 
-if ('ontouchstart' in document.documentElement && navigator.userAgent.match(/Mobi/ && global.settings.touch) ? true : false){
+if (touchMode()){
     $(document).on('touchend',function(e){
         if ($(`.popper`).length === 1){
             clearPopper();

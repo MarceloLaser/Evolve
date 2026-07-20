@@ -29,6 +29,8 @@ Additionally, in the GruvBox Dark theme, resources with an armed alert checkbox 
 ## Fork Additions: Mobile Layout (work in progress)
 On screens narrower than 48rem the layout mirrors the desktop split at phone scale (in the style of Kittens Game's mobile port): the left third is a pinned column with the race header, message log, and a compact resource list (two-line rows, reduced type), and the right two thirds hold the tab strip and game content, with vertical page scrolling for tall tabs. The top bar and tab strip scroll sideways instead of clipping. All mobile rules live in `src/mobile.less`, attached by a single `@import` at the end of `src/evolve.less`, so upstream merges stay clean — see `.claude/docs/mobile-ui.md` for the policy. Desktop rendering is unchanged.
 
+Touch interaction auto-enables on touch-primary devices (standard media-query detection, engine-agnostic — no user-agent sniffing): tapping a building opens its tooltip, a Construct button in the tooltip performs the purchase, direct taps on the button never buy accidentally, and tooltips dismiss on tap. This activates (and fixes) the base game's dormant "Touch Device" feature; the now-obsolete settings toggle is hidden.
+
 ## Fork Additions: Live Tooltips
 Research and evolution tooltips refresh once per second while open, so the "ready in" affordability countdown at the bottom counts down without needing mouse movement (cost coloring updates too). Building tooltips already had live timers via the game's own reactive binding and are unchanged.
 

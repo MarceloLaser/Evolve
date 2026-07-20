@@ -1,5 +1,6 @@
 import { global, save, seededRandom, webWorker, keyMultiplier, keyMap, srSpeak, sizeApproximation, p_on, support_on, int_on, gal_on, spire_on, tmp_vars, setupStats, callback_queue } from './vars.js';
 import { loc } from './locale.js';
+import { touchMode } from './mobile.js';
 import { timeCheck, timeFormat, vBind, popover, clearPopper, flib, tagEvent, clearElement, costMultiplier, darkEffect, genCivName, powerModifier, powerCostMod, calcPrestige, adjustCosts, modRes, messageQueue, buildQueue, format_emblem, shrineBonusActive, calc_mastery, calcPillar, calcGenomeScore, getShrineBonus, eventActive, easterEgg, getHalloween, trickOrTreat, deepClone, hoovedRename, get_qlevel } from './functions.js';
 import { unlockAchieve, challengeIcon, alevel, universeAffix, checkAdept } from './achieve.js';
 import { races, traits, genus_def, neg_roll_traits, randomMinorTrait, cleanAddTrait, combineTraits, biomes, planetTraits, setJType, altRace, setTraitRank, setImitation, shapeShift, basicRace, fathomCheck, traitCostMod, renderSupernatural, blubberFill, traitRank } from './races.js';
@@ -6341,7 +6342,7 @@ export function setAction(c_action,action,type,old,prediction){
         },
         methods: {
             action(args){
-                if ('ontouchstart' in document.documentElement && navigator.userAgent.match(/Mobi/ && global.settings.touch) ? true : false){
+                if (touchMode()){
                     return;
                 }
                 else {
@@ -7255,7 +7256,7 @@ export function actionDesc(parent,c_action,obj,old,action,a_type,bres){
     bres = bres || false;
     
     let touch = false;
-    if (action && a_type && 'ontouchstart' in document.documentElement && navigator.userAgent.match(/Mobi/) && global.settings.touch ? true : false){
+    if (action && a_type && touchMode()){
         touch = $(`<a id="touchButton" class="button is-dark touchButton">${c_action.hasOwnProperty('touchlabel') ? c_action.touchlabel : loc('construct')}</a>`);
         parent.append(touch);
 
@@ -7516,6 +7517,11 @@ export function removeAction(id){
 // already live-update their timer through the Vue-bound #popTimer, so they are not
 // handled here; nested-region categories cannot be resolved from the popper id anyway
 export function refreshActionTooltip(){
+    // On touch devices the re-render would recreate the tooltip's Construct button
+    // mid-tap; a static tooltip is the lesser evil there
+    if (touchMode()){
+        return;
+    }
     let popper = $('#popper');
     if (popper.length === 0){
         return;

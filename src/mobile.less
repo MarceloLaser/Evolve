@@ -1,6 +1,14 @@
 // Fork-only mobile layout overrides. ALL mobile-friendliness rules live in this file —
 // it is attached by a single @import at the end of evolve.less so upstream merges stay
 // clean. Never edit upstream style blocks for mobile behavior; add rules here instead.
+
+// The Touch Device setting is obsolete: touch mode auto-enables on touch-primary
+// devices (mobile.js touchMode()). Hide the toggle everywhere, desktop included —
+// this rule is deliberately outside the media query below. Browsers too old for
+// :has() just show a toggle that no longer does anything
+label.switch:has(.settings16) {
+    display: none;
+}
 //
 // Layout model (Kittens Game style): left third of the screen is a pinned column with
 // the race header, message log, and resource list in compact type; right two thirds is
