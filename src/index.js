@@ -1375,26 +1375,6 @@ export function index(){
         $(this).addClass('is-active');
     });
 
-    // Keep #mobileNav and .promoBar visually anchored when browser toolbars toggle or user zooms.
-    // visualViewport tracks the *visible* window; position:fixed tracks the layout viewport —
-    // when they diverge (toolbar changes, zoom) we correct with a CSS transform offset.
-    if ('visualViewport' in window) {
-        const $navBar = $('#mobileNav');
-        const $promoBar = $('.promoBar');
-
-        const syncFixedToViewport = () => {
-            const vv = window.visualViewport;
-            // How many px the visual viewport is inset from the bottom of the layout viewport
-            const offsetFromBottom = window.innerHeight - (vv.height + vv.offsetTop);
-            const translateY = -Math.round(Math.max(0, offsetFromBottom));
-            $navBar.css('transform', `translateY(${translateY}px)`);
-            $promoBar.css('transform', `translateY(${translateY}px)`);
-        };
-
-        window.visualViewport.addEventListener('resize', syncFixedToViewport);
-        window.visualViewport.addEventListener('scroll', syncFixedToViewport);
-    }
-
     // Bottom Bar
     $('body').append(`
         <div class="promoBar">
@@ -1418,4 +1398,47 @@ export function index(){
             </span>
         </div>
     `);
+
+    if ('visualViewport' in window) {
+        const $navBar = $('#mobileNav');
+        const $promoBar = $('.promoBar');
+
+        const syncFixedToViewport = () => {
+            const vv = window.visualViewport;
+            if (vv.scale !== 1) {
+                return;
+            }
+            const offsetFromBottom = window.innerHeight - (vv.height + vv.offsetTop);
+            const translateY = -Math.round(Math.max(0, offsetFromBottom));
+            $navBar.css('transform', `translateY(${translateY}px)`);
+            $promoBar.css('transform', `translateY(${translateY}px)`);
+        };
+
+        syncFixedToViewport();
+        window.visualViewport.addEventListener('resize', syncFixedToViewport);
+    }
+
+    // Mobile self-scrolling panels (#settings, #evolution, resTabs/govTabs2 sections) get
+    // their height set here instead of a CSS calc(): measure each panel's actual
+    // top position and size it to reach exactly to the bottom bar, on any screen/nesting.
+    const sizeScrollPanels = () => {
+        if (window.innerWidth > 768) {
+            return;
+        }
+        const remPx = parseFloat(getComputedStyle(document.documentElement).fontSize);
+        const barsPx = 3.7 * remPx;
+        document.querySelectorAll('#settings, #evolution, .resTabs > section, .govTabs2 > section').forEach((el) => {
+            if (!el.offsetParent) {
+                return;
+            }
+            const top = el.getBoundingClientRect().top;
+            el.style.height = `${Math.max(0, window.innerHeight - top - barsPx)}px`;
+        });
+    };
+
+    sizeScrollPanels();
+    window.addEventListener('resize', sizeScrollPanels);
+    // Re-measure after any click (tab switches, panel switches) — delayed past the 300ms
+    // slide-transition so we measure the settled position, not mid-animation.
+    document.addEventListener('click', () => setTimeout(sizeScrollPanels, 400));
 }

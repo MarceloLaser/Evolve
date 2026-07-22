@@ -5785,7 +5785,6 @@ div.bigbang {
     // Stack columns vertically, full width, minimal side margins
     .main {
         margin: 0.75rem;
-        overflow-y: unset;
 
         .content {
             .settings {
@@ -5818,8 +5817,9 @@ div.bigbang {
 
         .resTabs {
             > section {
-                top: 0.75rem;
-                height: calc(100vh - 10.1rem);
+                position: static !important;
+                overflow-y: auto !important;
+                overflow-x: hidden !important;
             }
 
             > .tab-content {
@@ -5827,15 +5827,40 @@ div.bigbang {
             }
         }
 
+        .govTabs2 {
+            > section {
+                position: static !important;
+                overflow-y: auto !important;
+                overflow-x: hidden !important;
+            }
+        }
+
         .civics {
             padding: 0;
+        }
+
+        .job .controls {
+            flex: none;
+            white-space: nowrap;
+        }
+
+        .theme,
+        .localization,
+        .queue {
+            span, .dropdown {
+                vertical-align: middle;
+                margin-right: 0.2rem;
+            }
         }
 
         #mainTabs {
             > .tab-content {
 
-                #settings {
-                    padding-bottom: 1rem !important; // makes sure the settings tab content doesn't get cut off at the bottom of the screen
+                #settings,
+                #evolution {
+                    position: static !important;
+                    overflow-y: auto !important;
+                    overflow-x: hidden !important;
                 }
             }
         }
@@ -5938,11 +5963,6 @@ div.bigbang {
 
             #sideQueue {
                 display: block;
-
-                #msgQueue {
-                    height: auto;
-                    overflow-y: visible;
-                }
             }
         }
 
