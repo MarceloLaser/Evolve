@@ -6513,6 +6513,8 @@
   "resource_market_units": "units",
   "resource_market_auto_sell_desc": "Auto-sell %0 %1 per second for $%2",
   "resource_market_auto_buy_desc": "Auto-buy %0 %1 per second for $%2",
+  "resource_storage_max_build": "Build",
+  "resource_storage_max_build_desc": "The highest cost of %0 among buildings currently affordable in $ storage.",
   "resource_market_trade_routes": "Trade Routes",
   "resource_market_galactic_trade_routes": "Galactic Routes",
   "resource_modal_crate_construct": "Construct Crate",
